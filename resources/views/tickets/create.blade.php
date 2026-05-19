@@ -137,6 +137,8 @@
 
     </div>
 
+    // Script para exibir informações da categoria selecionada
+        
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const categorySelect = document.getElementById('category_id');
