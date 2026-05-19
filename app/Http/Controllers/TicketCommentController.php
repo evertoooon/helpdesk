@@ -2,64 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ticket;
 use App\Models\TicketComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TicketCommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function store(
+        Request $request,
+        Ticket $ticket
+    )
     {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $request->validate([
+            'comment' => 'required|string'
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        TicketComment::create([
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TicketComment $ticketComment)
-    {
-        //
-    }
+            'ticket_id' => $ticket->id,
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TicketComment $ticketComment)
-    {
-        //
-    }
+            'user_id' => Auth::id(),
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, TicketComment $ticketComment)
-    {
-        //
-    }
+            'comment' => $request->comment
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TicketComment $ticketComment)
-    {
-        //
+        ]);
+
+        return redirect()
+            ->route(
+                'tickets.show',
+                $ticket
+            )
+            ->with(
+                'success',
+                'Comentário adicionado com sucesso!'
+            );
     }
 }
