@@ -1,171 +1,206 @@
 <x-app-layout>
 
-    <div class="py-6 max-w-4xl mx-auto">
+    <div class="space-y-8">
 
-        <h1 class="text-2xl font-bold mb-5">
-            Novo Chamado
-        </h1>
+        <div class="flex items-center gap-5">
 
-        <div class="bg-blue-100 p-4 rounded mb-5">
-            <p>
-                Preencha as informações abaixo com o máximo de detalhes possível.
-                A prioridade do chamado será avaliada pela equipe responsável após a abertura.
-            </p>
+            <div class="w-16 h-16 rounded-3xl bg-green-500/20 border border-green-300/30 shadow-[0_0_30px_rgba(34,197,94,.40)] flex items-center justify-center">
+                <svg class="w-8 h-8 text-green-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m7-7H5"/>
+                </svg>
+            </div>
+
+            <div>
+                <h1 class="text-5xl font-bold bg-gradient-to-r from-green-300 via-white to-blue-300 bg-clip-text text-transparent">
+                    Novo Chamado
+                </h1>
+
+                <p class="text-blue-100 mt-2 text-lg">
+                    Descreva seu problema para receber suporte.
+                </p>
+            </div>
+
         </div>
 
-        @if ($errors->any())
-            <div class="bg-red-200 p-3 rounded mb-4">
+        @if($errors->any())
+            <div class="bg-red-500/20 border border-red-300/30 text-red-100 p-4 rounded-2xl backdrop-blur-xl">
                 <ul>
-                    @foreach ($errors->all() as $error)
+                    @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
         @endif
 
-        <form method="POST" action="{{ route('tickets.store') }}">
-            @csrf
+        <div class="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl rounded-3xl border border-white/15 shadow-2xl overflow-hidden">
 
-            <div class="mb-4">
-                <label class="block mb-1">
-                    Categoria do problema
-                </label>
+            <div class="p-6 border-b border-white/10 flex items-center gap-4">
 
-                <select
-                    name="category_id"
-                    id="category_id"
-                    class="w-full border rounded p-2">
+                <div class="w-11 h-11 rounded-2xl bg-green-500/20 border border-green-300/30 flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,.35)]">
+                    <svg class="w-6 h-6 text-green-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m7-7H5"/>
+                    </svg>
+                </div>
 
-                    <option value="">
-                        Selecione a categoria
-                    </option>
+                <h2 class="text-2xl font-bold text-white">
+                    Abrir chamado
+                </h2>
 
-                    @foreach($categories as $category)
-                        <option
-                            value="{{ $category->id }}"
-                            data-name="{{ $category->name }}"
-                            data-description="{{ $category->description }}"
-                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
+            </div>
 
-                </select>
+            <form method="POST" action="{{ route('tickets.store') }}" class="p-6">
 
-                <p class="text-sm text-gray-600 mt-2">
-                    Escolha a categoria que mais se aproxima do problema encontrado.
-                    Se tiver dúvidas, leia a explicação exibida após selecionar uma opção.
-                </p>
+                @csrf
 
-                <div
-                    id="category-info"
-                    class="hidden bg-gray-100 border border-gray-300 rounded p-4 mt-3">
+                <div class="space-y-6">
 
-                    <p class="font-bold mb-2">
-                        Sobre esta categoria
-                    </p>
+                    <div>
 
-                    <p class="mb-1">
-                        Você selecionou:
-                        <strong id="category-name"></strong>
-                    </p>
+                        <label class="block font-semibold text-blue-100 mb-2">
+                            Categoria
+                        </label>
 
-                    <p
-                        id="category-description"
-                        class="text-sm text-gray-700 leading-relaxed break-words">
-                    </p>
+                        <select
+                            id="categorySelect"
+                            name="category_id"
+                            class="w-full bg-white/10 border border-white/20 text-white rounded-2xl p-4 focus:border-blue-300 focus:ring-blue-300">
+
+                            <option value="" class="text-slate-900">
+                                Selecione
+                            </option>
+
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" class="text-slate-900">
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                    <div id="helperBox"
+                         class="hidden bg-blue-500/10 border border-blue-300/20 rounded-2xl p-5">
+
+                        <h3 class="text-white text-xl font-bold mb-3">
+                            Informações úteis
+                        </h3>
+
+                        <p id="helperText"
+                           class="text-blue-100 leading-relaxed">
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <label class="block font-semibold text-blue-100 mb-2">
+                            Título
+                        </label>
+
+                        <input
+                            type="text"
+                            name="title"
+                            value="{{ old('title') }}"
+                            placeholder="Ex: computador não liga"
+                            class="w-full bg-white/10 border border-white/20 text-white rounded-2xl p-4 placeholder-blue-200 focus:border-blue-300 focus:ring-blue-300">
+
+                    </div>
+
+                    <div>
+
+                        <label class="block font-semibold text-blue-100 mb-2">
+                            Descrição
+                        </label>
+
+                        <textarea
+                            rows="7"
+                            name="description"
+                            placeholder="Descreva detalhadamente o problema..."
+                            class="w-full bg-white/10 border border-white/20 text-white rounded-2xl p-4 placeholder-blue-200 focus:border-blue-300 focus:ring-blue-300">{{ old('description') }}</textarea>
+
+                    </div>
+
+                    <div class="bg-yellow-500/10 border border-yellow-300/20 rounded-2xl p-5">
+
+                        <p class="text-yellow-100 leading-relaxed">
+                            O chamado será registrado inicialmente como
+                            <strong>Aberto</strong>
+                            e com prioridade
+                            <strong>Média</strong>.
+                            A equipe responsável poderá ajustar a prioridade após analisar o problema.
+                        </p>
+
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+
+                        <button
+                            type="submit"
+                            class="action-btn bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-7 py-4 rounded-2xl font-bold shadow-[0_0_30px_rgba(34,197,94,.35)] transition">
+                            Abrir Chamado
+                        </button>
+
+                        <a href="{{ route('tickets.index') }}"
+                           class="action-btn bg-white/10 hover:bg-white/20 text-white px-7 py-4 rounded-2xl font-bold border border-white/10 transition">
+                            Voltar
+                        </a>
+
+                    </div>
 
                 </div>
-            </div>
 
-            <div class="mb-4">
-                <label class="block mb-1">
-                    Título do problema
-                </label>
+            </form>
 
-                <input
-                    type="text"
-                    name="title"
-                    value="{{ old('title') }}"
-                    placeholder="Ex: Computador não liga"
-                    class="w-full border rounded p-2">
-
-                <p class="text-sm text-gray-600 mt-1">
-                    Use um título curto e direto para resumir o problema.
-                </p>
-            </div>
-
-            <div class="mb-4">
-                <label class="block mb-1">
-                    Descrição detalhada
-                </label>
-
-                <textarea
-                    name="description"
-                    rows="6"
-                    placeholder="Explique o que aconteceu, quando começou, onde ocorreu e se apareceu alguma mensagem de erro."
-                    class="w-full border rounded p-2">{{ old('description') }}</textarea>
-
-                <p class="text-sm text-gray-600 mt-1">
-                    Quanto mais detalhes você informar, mais fácil será para a equipe entender e resolver o chamado.
-                </p>
-            </div>
-
-            <div class="bg-yellow-100 p-4 rounded mb-5">
-                <p>
-                    Ao abrir o chamado, ele será registrado como
-                    <strong>Aberto</strong>
-                    e com prioridade inicial
-                    <strong>Média</strong>.
-                    A equipe responsável poderá alterar a prioridade após analisar o problema.
-                </p>
-            </div>
-
-            <div class="flex gap-3">
-                <button
-                    type="submit"
-                    class="bg-green-500 text-white px-4 py-2 rounded">
-                    Abrir Chamado
-                </button>
-
-                <a href="{{ route('tickets.index') }}"
-                   class="bg-gray-500 text-white px-4 py-2 rounded">
-                    Voltar
-                </a>
-            </div>
-        </form>
+        </div>
 
     </div>
 
-    // Script para exibir informações da categoria selecionada
-        
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const categorySelect = document.getElementById('category_id');
-            const categoryInfo = document.getElementById('category-info');
-            const categoryName = document.getElementById('category-name');
-            const categoryDescription = document.getElementById('category-description');
+            const category = document.getElementById('categorySelect');
+            const helper = document.getElementById('helperBox');
+            const helperText = document.getElementById('helperText');
+            const buttons = document.querySelectorAll('.action-btn');
 
-            function updateCategoryInfo() {
-                const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+            const tips = {
+                "Acesso": "Problemas comuns: senha incorreta, bloqueio de acesso ou usuário sem permissão.",
+                "E-mail": "Problemas comuns: não recebe emails, erro ao enviar ou caixa cheia.",
+                "Hardware": "Problemas comuns: computador lento, não liga ou defeitos físicos.",
+                "Impressora": "Problemas comuns: atolamento, offline ou falha de impressão.",
+                "Manutenção": "Problemas comuns: limpeza preventiva, revisão de equipamentos ou troca de componentes.",
+                "Outros": "Use esta opção quando o problema não se encaixar claramente nas demais categorias.",
+                "Rede": "Problemas comuns: internet lenta, queda de conexão ou dificuldade de acesso à rede.",
+                "Servidor": "Problemas comuns: serviço indisponível, sistema fora do ar ou falha em infraestrutura.",
+                "Sistema": "Problemas comuns: erro interno, falha inesperada, lentidão ou travamento do sistema.",
+                "Software": "Problemas comuns: erros, travamentos, atualização ou instalação de programas."
+            };
 
-                const name = selectedOption.getAttribute('data-name');
-                const description = selectedOption.getAttribute('data-description');
+            // Exibe ajuda conforme categoria selecionada
+            category.addEventListener('change', function () {
+                const selectedName = category.options[category.selectedIndex].text.trim();
 
-                if (name && description) {
-                    categoryName.textContent = name;
-                    categoryDescription.textContent = description;
-                    categoryInfo.classList.remove('hidden');
+                if (tips[selectedName]) {
+                    helper.classList.remove('hidden');
+                    helperText.innerText = tips[selectedName];
                 } else {
-                    categoryName.textContent = '';
-                    categoryDescription.textContent = '';
-                    categoryInfo.classList.add('hidden');
+                    helper.classList.add('hidden');
+                    helperText.innerText = '';
                 }
-            }
+            });
 
-            categorySelect.addEventListener('change', updateCategoryInfo);
+            // Efeito visual dos botões
+            buttons.forEach(function (button) {
+                button.addEventListener('mouseenter', function () {
+                    button.style.transform = 'scale(1.04)';
+                    button.style.boxShadow = '0 0 25px rgba(255,255,255,.15)';
+                });
 
-            updateCategoryInfo();
+                button.addEventListener('mouseleave', function () {
+                    button.style.transform = 'scale(1)';
+                    button.style.boxShadow = '';
+                });
+            });
         });
     </script>
 
