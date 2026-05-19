@@ -2,64 +2,98 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $tickets = Ticket::with(['user', 'category'])
+            ->latest()
+            ->get();
+
+        return view('tickets.index', compact('tickets'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $categories = Category::where('active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('tickets.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
+
+        Ticket::create([
+            'user_id' => Auth::id(),
+            'category_id' => $request->category_id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'priority' => 'Média',
+            'status' => 'Aberto',
+        ]);
+
+        return redirect()
+            ->route('tickets.index')
+            ->with('success', 'Chamado aberto com sucesso! A prioridade será avaliada pela equipe responsável.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Ticket $ticket)
     {
-        //
+        $ticket->load(['user', 'category', 'comments.user']);
+
+        return view('tickets.show', compact('ticket'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Ticket $ticket)
     {
-        //
+        $categories = Category::where('active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('tickets.edit', compact('ticket', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Ticket $ticket)
     {
-        //
+        $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'priority' => 'required|string|in:Baixa,Média,Alta,Urgente',
+            'status' => 'required|string|in:Aberto,Em andamento,Resolvido,Cancelado',
+        ]);
+
+        $ticket->update($request->only([
+            'category_id',
+            'title',
+            'description',
+            'priority',
+            'status',
+        ]));
+
+        return redirect()
+            ->route('tickets.index')
+            ->with('success', 'Chamado atualizado com sucesso!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Ticket $ticket)
     {
-        //
+        $ticket->delete();
+
+        return redirect()
+            ->route('tickets.index')
+            ->with('success', 'Chamado removido com sucesso!');
     }
 }
