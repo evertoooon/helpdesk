@@ -7,29 +7,50 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
-protected $fillable = [
-    'user_id',
-    'category_id',
-    'title',
-    'description',
-    'priority',
-    'status',
-];
+    use HasFactory;
 
-public function user()
-{
-    return $this->belongsTo(User::class);
-}
+    protected $fillable = [
+        'user_id',
+        'assigned_to',
+        'category_id',
+        'title',
+        'description',
+        'priority',
+        'status',
+    ];
 
-public function category()
-{
-    return $this->belongsTo(Category::class);
-}
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
+    }
 
-public function comments()
-{
-    return $this->hasMany(TicketComment::class);
-}   
+    // Responsável pelo atendimento
+    public function assignedUser()
+    {
+        return $this->belongsTo(
+            \App\Models\User::class,
+            'assigned_to'
+        );
+    }
 
-use HasFactory;
+    public function category()
+    {
+        return $this->belongsTo(
+            \App\Models\Category::class
+        );
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(
+            \App\Models\TicketComment::class
+        );
+    }
+
+    public function histories()
+    {
+        return $this->hasMany(
+            \App\Models\TicketHistory::class
+        );
+    }
 }

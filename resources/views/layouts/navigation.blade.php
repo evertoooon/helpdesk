@@ -1,110 +1,259 @@
 <nav x-data="{ open: false }"
-    class="bg-white/10 backdrop-blur-xl border-b border-white/10 shadow-xl sticky top-0 z-50">
+class="relative z-50 py-4">
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto px-6">
 
-        <div class="flex justify-between h-16">
+<div class="
+bg-gradient-to-r
+from-[#08142d]/95
+via-[#0f1f4d]/95
+to-[#26124f]/95
 
-            <div class="flex items-center">
+backdrop-blur-xl
+rounded-[30px]
+border border-blue-400/15
+shadow-[0_0_35px_rgba(70,90,255,.18)]
 
-                <a href="{{ route('dashboard') }}"
-                   class="flex items-center gap-3">
+px-8
+py-5
+">
 
-                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold shadow-lg">
-                        H
-                    </div>
+<div class="flex items-center justify-between">
 
-                    <div>
-                        <h1 class="text-xl font-bold text-white leading-tight">
-                            HelpDesk
-                        </h1>
+<div class="flex items-center gap-14">
 
-                        <p class="text-[11px] text-blue-200 leading-tight">
-                            Sistema de suporte
-                        </p>
-                    </div>
+<a href="{{ route('dashboard') }}"
+class="flex items-center gap-4">
 
-                </a>
+<div class="relative">
 
-                <div class="hidden space-x-2 sm:flex sm:items-center sm:ms-10">
+<!-- brilho -->
 
-                    <a href="{{ route('dashboard') }}"
-                       class="px-4 py-2 rounded-xl text-blue-100 hover:text-white hover:bg-white/10 transition">
-                        Dashboard
-                    </a>
+<div class="
+absolute
+inset-0
+rounded-full
+blur-xl
+bg-purple-500/50">
+</div>
 
-                    <a href="{{ route('categories.index') }}"
-                       class="px-4 py-2 rounded-xl text-blue-100 hover:text-white hover:bg-white/10 transition">
-                        Categorias
-                    </a>
+<!-- logo -->
 
-                    <a href="{{ route('tickets.index') }}"
-                       class="px-4 py-2 rounded-xl text-blue-100 hover:text-white hover:bg-white/10 transition">
-                        Chamados
-                    </a>
+<div class="
+relative
+w-16
+h-16
+rounded-full
 
-                </div>
+bg-gradient-to-r
+from-cyan-500
+via-blue-500
+to-purple-600
 
-            </div>
+p-[3px]
+shadow-[0_0_30px_rgba(110,90,255,.8)]
+">
 
-            <div class="hidden sm:flex sm:items-center">
+<div class="
+w-full
+h-full
+rounded-full
+bg-[#091223]
+flex
+items-center
+justify-center
+relative
+">
 
-                <x-dropdown align="right" width="48">
+<!-- circuito -->
 
-                    <x-slot name="trigger">
+<div class="absolute top-1 left-1/2 w-[2px] h-3 bg-cyan-400"></div>
+<div class="absolute bottom-1 left-1/2 w-[2px] h-3 bg-purple-400"></div>
 
-                        <button
-                            class="inline-flex items-center px-4 py-2 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 text-white hover:bg-white/20 transition">
+<div class="absolute left-1 top-1/2 h-[2px] w-3 bg-cyan-400"></div>
+<div class="absolute right-1 top-1/2 h-[2px] w-3 bg-purple-400"></div>
 
-                            <div>
-                                {{ Auth::user()->name }}
-                            </div>
+<!-- ticket -->
 
-                            <div class="ms-2">
-                                <svg class="fill-current h-4 w-4"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10
-                                        10.586l3.293-3.293a1 1 0
-                                        111.414 1.414l-4
-                                        4a1 1 0
-                                        01-1.414
-                                        0l-4-4a1
-                                        1 0
-                                        010-1.414z"
-                                        clip-rule="evenodd"/>
-                                </svg>
-                            </div>
+<div class="
+w-9
+h-7
+rounded-md
 
-                        </button>
+bg-gradient-to-r
+from-blue-500/30
+to-purple-500/30
 
-                    </x-slot>
+border
+border-cyan-300
 
-                    <x-slot name="content">
+flex
+items-center
+justify-center
 
-                        <x-dropdown-link :href="route('profile.edit')">
-                            Perfil
-                        </x-dropdown-link>
+text-white
+font-bold
+">
 
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+HD
 
-                            <x-dropdown-link
-                                :href="route('logout')"
-                                onclick="event.preventDefault(); this.closest('form').submit();">
-                                Sair
-                            </x-dropdown-link>
-                        </form>
+</div>
 
-                    </x-slot>
+</div>
+</div>
 
-                </x-dropdown>
+</div>
 
-            </div>
+<div>
 
-        </div>
+<h1 class="
+text-3xl
+font-bold
+text-white
+leading-none">
+HelpDesk
+</h1>
 
-    </div>
+<p class="
+text-sm
+text-blue-200">
+Sistema de suporte
+</p>
+
+</div>
+
+</a>
+
+
+<div class="hidden lg:flex gap-4">
+
+<a href="{{ route('dashboard') }}"
+class="
+px-8
+py-4
+rounded-2xl
+
+bg-white/10
+border
+border-white/10
+
+text-white
+
+hover:bg-white/15
+transition
+duration-300
+
+shadow-[0_0_15px_rgba(60,120,255,.15)]
+">
+
+📊 Dashboard
+
+</a>
+
+
+<a href="{{ route('categories.index') }}"
+class="
+px-8
+py-4
+rounded-2xl
+
+text-blue-100
+hover:text-white
+hover:bg-white/10
+transition">
+
+📂 Categorias
+
+</a>
+
+
+<a href="{{ route('tickets.index') }}"
+class="
+px-8
+py-4
+rounded-2xl
+
+text-blue-100
+hover:text-white
+hover:bg-white/10
+transition">
+
+📋 Chamados
+
+</a>
+
+</div>
+
+</div>
+
+
+
+<div>
+
+<x-dropdown align="right" width="48">
+
+<x-slot name="trigger">
+
+<button class="
+px-6
+py-4
+
+rounded-2xl
+
+bg-white/10
+border border-white/10
+
+text-white
+
+backdrop-blur-xl
+
+hover:bg-white/20
+transition
+">
+
+👤 {{ Auth::user()->name }}
+
+</button>
+
+</x-slot>
+
+
+<x-slot name="content">
+
+<x-dropdown-link
+:href="route('profile.edit')">
+
+Perfil
+
+</x-dropdown-link>
+
+<form
+method="POST"
+action="{{ route('logout') }}">
+
+@csrf
+
+<x-dropdown-link
+:href="route('logout')"
+onclick="event.preventDefault();
+this.closest('form').submit();">
+
+Sair
+
+</x-dropdown-link>
+
+</form>
+
+</x-slot>
+
+</x-dropdown>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 </nav>
