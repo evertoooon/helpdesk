@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketCommentController;
-
+use App\Models\Category;
+use App\Models\Ticket;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -14,8 +16,53 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+    if (Auth::user()->role === 'admin') {
+
+        $totalCategories = Category::count();
+
+        $activeCategories = Category::where('active', true)->count();
+
+        $totalTickets = Ticket::count();
+
+        $openTickets = Ticket::where('status', 'Aberto')->count();
+
+        $progressTickets = Ticket::where('status', 'Em andamento')->count();
+
+        $resolvedTickets = Ticket::where('status', 'Resolvido')->count();
+
+        return view('dashboard', compact(
+            'totalCategories',
+            'activeCategories',
+            'totalTickets',
+            'openTickets',
+            'progressTickets',
+            'resolvedTickets'
+        ));
+    }
+
+    $myTickets = Ticket::where('user_id', Auth::id())->get();
+
+    $myOpenTickets = $myTickets
+        ->where('status', 'Aberto')
+        ->count();
+
+    $myProgressTickets = $myTickets
+        ->where('status', 'Em andamento')
+        ->count();
+
+    $myResolvedTickets = $myTickets
+        ->where('status', 'Resolvido')
+        ->count();
+
+    return view('dashboard-user', compact(
+        'myTickets',
+        'myOpenTickets',
+        'myProgressTickets',
+        'myResolvedTickets'
+    ));
+
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('categories', CategoryController::class);

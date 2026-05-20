@@ -151,18 +151,16 @@ shadow-[0_0_15px_rgba(60,120,255,.15)]
 </a>
 
 
-<a href="{{ route('categories.index') }}"
-class="
-px-8
-py-4
-rounded-2xl
+@if(Auth::user()->role === 'admin')
 
-text-blue-100
-hover:text-white
-hover:bg-white/10
-transition">
+    <a href="{{ route('categories.index') }}"
+       class="px-8 py-4 rounded-2xl text-blue-100 hover:text-white hover:bg-white/10 transition">
 
-📂 Categorias
+        📂 Categorias
+
+    </a>
+
+@endif
 
 </a>
 

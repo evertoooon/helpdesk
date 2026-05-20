@@ -125,26 +125,26 @@
                 </div>
 
 
-               <!-- Filtros e pesquisa -->
+                <!-- Filtros e pesquisa -->
 
-<div class="p-6 border-b border-white/10">
+                <div class="p-6 border-b border-white/10">
 
-    <form method="GET"
-          action="{{ route('tickets.index') }}">
+                    <form method="GET"
+                        action="{{ route('tickets.index') }}">
 
-        <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
 
-            <!-- Busca -->
+                            <!-- Busca -->
 
-            <div class="md:col-span-2">
+                            <div class="md:col-span-2">
 
-                <input
-                    type="text"
-                    name="search"
-                    value="{{ request('search') }}"
-                    placeholder="Pesquisar chamado..."
+                                <input
+                                    type="text"
+                                    name="search"
+                                    value="{{ request('search') }}"
+                                    placeholder="Pesquisar chamado..."
 
-                    class="w-full
+                                    class="w-full
                     bg-white/10
                     border border-white/10
                     rounded-2xl
@@ -154,95 +154,95 @@
                     focus:border-blue-400
                     focus:ring-blue-400">
 
-            </div>
+                            </div>
 
 
-            <!-- Status -->
+                            <!-- Status -->
 
-            <select
-                name="status"
+                            <select
+                                name="status"
 
-                class="bg-white/10
+                                class="bg-white/10
                 border border-white/10
                 rounded-2xl
                 px-4 py-4
                 text-white">
 
-                <option value="" class="text-black">
-                    Status
-                </option>
+                                <option value="" class="text-black">
+                                    Status
+                                </option>
 
-                <option value="Aberto"
-                        class="text-black"
-                        {{ request('status')=='Aberto' ? 'selected':'' }}>
-                    Aberto
-                </option>
+                                <option value="Aberto"
+                                    class="text-black"
+                                    {{ request('status')=='Aberto' ? 'selected':'' }}>
+                                    Aberto
+                                </option>
 
-                <option value="Em andamento"
-                        class="text-black"
-                        {{ request('status')=='Em andamento' ? 'selected':'' }}>
-                    Em andamento
-                </option>
+                                <option value="Em andamento"
+                                    class="text-black"
+                                    {{ request('status')=='Em andamento' ? 'selected':'' }}>
+                                    Em andamento
+                                </option>
 
-                <option value="Resolvido"
-                        class="text-black"
-                        {{ request('status')=='Resolvido' ? 'selected':'' }}>
-                    Resolvido
-                </option>
+                                <option value="Resolvido"
+                                    class="text-black"
+                                    {{ request('status')=='Resolvido' ? 'selected':'' }}>
+                                    Resolvido
+                                </option>
 
-            </select>
+                            </select>
 
 
-            <!-- Prioridade -->
+                            <!-- Prioridade -->
 
-            <select
-                name="priority"
+                            <select
+                                name="priority"
 
-                class="bg-white/10
+                                class="bg-white/10
                 border border-white/10
                 rounded-2xl
                 px-4 py-4
                 text-white">
 
-                <option value="" class="text-black">
-                Prioridades
-                </option>
+                                <option value="" class="text-black">
+                                    Prioridades
+                                </option>
 
-                <option value="Baixa"
-                        class="text-black"
-                        {{ request('priority')=='Baixa' ? 'selected':'' }}>
-                    🟢 Baixa
-                </option>
+                                <option value="Baixa"
+                                    class="text-black"
+                                    {{ request('priority')=='Baixa' ? 'selected':'' }}>
+                                    🟢 Baixa
+                                </option>
 
-                <option value="Média"
-                        class="text-black"
-                        {{ request('priority')=='Média' ? 'selected':'' }}>
-                    🟡 Média
-                </option>
+                                <option value="Média"
+                                    class="text-black"
+                                    {{ request('priority')=='Média' ? 'selected':'' }}>
+                                    🟡 Média
+                                </option>
 
-                <option value="Alta"
-                        class="text-black"
-                        {{ request('priority')=='Alta' ? 'selected':'' }}>
-                    🟠 Alta
-                </option>
+                                <option value="Alta"
+                                    class="text-black"
+                                    {{ request('priority')=='Alta' ? 'selected':'' }}>
+                                    🟠 Alta
+                                </option>
 
-                <option value="Urgente"
-                        class="text-black"
-                        {{ request('priority')=='Urgente' ? 'selected':'' }}>
-                    🔴 Urgente
-                </option>
+                                <option value="Urgente"
+                                    class="text-black"
+                                    {{ request('priority')=='Urgente' ? 'selected':'' }}>
+                                    🔴 Urgente
+                                </option>
 
-            </select>
+                            </select>
 
 
-            <!-- Botões -->
+                            <!-- Botões -->
 
-            <div class="flex gap-3">
+                            <div class="flex gap-3">
 
-                <button
-                    type="submit"
+                                <button
+                                    type="submit"
 
-                    class="
+                                    class="
                     action-btn
                     flex-1
                     bg-gradient-to-r
@@ -252,14 +252,14 @@
                     text-white
                     font-bold">
 
-                    Filtrar
+                                    Filtrar
 
-                </button>
+                                </button>
 
 
-                <a href="{{ route('tickets.index') }}"
+                                <a href="{{ route('tickets.index') }}"
 
-                   class="
+                                    class="
                    action-btn
                    flex-1
 
@@ -279,17 +279,17 @@
                    font-bold
                    transition">
 
-                    Limpar
+                                    Limpar
 
-                </a>
+                                </a>
 
-            </div>
+                            </div>
 
-        </div>
+                        </div>
 
-    </form>
+                    </form>
 
-</div>
+                </div>
 
                 <h2 class="text-2xl font-bold text-white">
                     Lista de chamados
@@ -434,6 +434,8 @@
                                         Ver
                                     </a>
 
+                                    @if(Auth::user()->role === 'admin')
+
                                     <a href="{{ route('tickets.edit', $ticket) }}"
                                         class="action-btn inline-flex items-center gap-2 bg-blue-500/25 hover:bg-blue-500/40 text-blue-100 rounded-xl px-4 py-2 transition border border-blue-300/20 whitespace-nowrap">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -452,15 +454,20 @@
 
                                         <button type="submit"
                                             class="action-btn inline-flex items-center gap-2 bg-red-500/25 hover:bg-red-500/40 text-red-100 rounded-xl px-4 py-2 transition border border-red-300/20 whitespace-nowrap">
+
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18" />
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 6V4h8v2" />
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 6l1 14h10l1-14" />
                                             </svg>
+
                                             Excluir
+
                                         </button>
 
                                     </form>
+
+                                    @endif
 
                                 </div>
 
