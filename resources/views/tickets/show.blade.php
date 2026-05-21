@@ -1,28 +1,25 @@
 <x-app-layout>
 
-<div class="space-y-8">
+<div class="space-y-8"
+     id="ticketContainer"
+     data-ticket-id="{{ $ticket->id }}"
+     data-comments-count="{{ $ticket->comments->count() }}">
 
     <!-- Cabeçalho -->
 
-    <div class="relative overflow-hidden
-                rounded-[30px]
-                border border-white/10
-                bg-gradient-to-r
-                from-[#1d3f8d]/80
-                via-[#243b7a]/80
-                to-[#48206f]/80
-                backdrop-blur-xl
-                p-8">
+    <div class="relative overflow-hidden rounded-[30px]
+        border border-white/10
+        bg-gradient-to-r
+        from-[#1d3f8d]/80
+        via-[#243b7a]/80
+        to-[#48206f]/80
+        backdrop-blur-xl p-8">
 
         <div class="flex items-center gap-5">
 
-            <div class="
-                w-20 h-20
-                rounded-3xl
-                bg-blue-500/20
-                border border-blue-400/20
-                flex items-center justify-center
-                shadow-[0_0_25px_rgba(59,130,246,.3)]">
+            <div class="w-20 h-20 rounded-3xl
+            bg-blue-500/20 border border-blue-400/20
+            flex items-center justify-center">
 
                 🎫
 
@@ -45,249 +42,269 @@
     </div>
 
 
-    <!-- Informações -->
+    <div class="mt-5">
 
-    <div class="grid md:grid-cols-3 gap-6">
+        <a href="{{ route('tickets.index') }}"
+        class="inline-flex items-center gap-2
+        bg-white/10 hover:bg-white/20
+        text-white px-5 py-3 rounded-2xl">
 
-        <div class="rounded-3xl
-                    bg-white/10
-                    backdrop-blur-xl
-                    border border-white/10
-                    p-6">
-
-            <p class="text-blue-200 text-sm">
-                Categoria
-            </p>
-
-            <h2 class="text-white text-2xl font-bold mt-2">
-                {{ $ticket->category->name }}
-            </h2>
-
-        </div>
-
-
-        <div class="rounded-3xl
-                    bg-white/10
-                    backdrop-blur-xl
-                    border border-white/10
-                    p-6">
-
-            <p class="text-blue-200 text-sm">
-                Status
-            </p>
-
-            <h2 class="text-green-300 text-2xl font-bold mt-2">
-                {{ $ticket->status }}
-            </h2>
-
-        </div>
-
-
-        <div class="rounded-3xl
-                    bg-white/10
-                    backdrop-blur-xl
-                    border border-white/10
-                    p-6">
-
-            <p class="text-blue-200 text-sm">
-                Prioridade
-            </p>
-
-            <h2 class="text-yellow-300 text-2xl font-bold mt-2">
-                {{ $ticket->priority }}
-            </h2>
-
-        </div>
-
-    </div>
-
-
-    <!-- Descrição -->
-
-    <div class="
-            bg-white/10
-            backdrop-blur-xl
-            rounded-3xl
-            border border-white/10
-            p-6">
-
-        <h2 class="text-2xl font-bold text-white mb-4">
-            📝 Descrição
-        </h2>
-
-        <p class="text-blue-100 leading-8">
-            {{ $ticket->description }}
-        </p>
-
-    </div>
-
-
-    <!-- ANEXO -->
-
-    @if($ticket->attachment)
-
-    <div class="
-            bg-white/10
-            backdrop-blur-xl
-            rounded-3xl
-            border border-white/10
-            p-6">
-
-        <h2 class="text-2xl font-bold text-white mb-5">
-            📷 Anexo do problema
-        </h2>
-
-        <p class="text-blue-200 mb-4">
-            Imagem enviada pelo usuário:
-        </p>
-
-        <a
-            href="{{ asset('storage/'.$ticket->attachment) }}"
-            target="_blank">
-
-            <img
-                src="{{ asset('storage/'.$ticket->attachment) }}"
-                class="
-                max-w-xl
-                rounded-3xl
-                border border-white/10
-                shadow-[0_0_35px_rgba(59,130,246,.25)]
-                hover:scale-[1.02]
-                transition duration-300">
+            ← Voltar
 
         </a>
 
-        <p class="text-sm text-slate-400 mt-4">
-            Clique na imagem para abrir em tamanho completo.
-        </p>
-
     </div>
 
-    @endif
 
+    <!-- Chat -->
 
-
-    <!-- Comentários -->
-
-    <div class="
-            bg-white/10
-            backdrop-blur-xl
-            rounded-3xl
-            border border-white/10
-            p-6">
+    <div class="bg-white/10
+    backdrop-blur-xl
+    rounded-3xl
+    border border-white/10
+    p-6">
 
         <h2 class="text-xl font-bold text-white mb-6">
-            💬 Comentários
+
+            💬 Conversa do chamado
+
         </h2>
 
-        @forelse($ticket->comments as $comment)
+
+        <div
+        id="chatArea"
+        class="space-y-5">
+
+            @foreach(
+                $ticket
+                ->comments
+                ->sortBy('created_at')
+                as $comment
+            )
+
+            @php
+                $isAdmin=
+                $comment
+                ->user
+                ->role
+                ===
+                'admin';
+            @endphp
 
             <div class="
-                bg-white/5
-                rounded-2xl
-                p-4
-                mb-4">
-
-                <div class="flex justify-between">
-
-                    <strong class="text-white">
-                        {{ $comment->user->name }}
-                    </strong>
-
-                    <span class="text-slate-400 text-sm">
-                        {{ $comment->created_at->format('d/m/Y H:i') }}
-                    </span>
-
-                </div>
-
-                <p class="text-blue-100 mt-2">
-                    {{ $comment->comment }}
-                </p>
-
-            </div>
-
-        @empty
-
-            <p class="text-slate-300">
-                Nenhum comentário encontrado.
-            </p>
-
-        @endforelse
-
-    </div>
-
-
-    <!-- Histórico -->
-
-    <div class="
-            bg-white/10
-            backdrop-blur-xl
-            rounded-3xl
-            border
-            border-white/10
-            p-6">
-
-        <h2 class="text-xl font-bold text-white mb-6">
-            📜 Histórico do chamado
-        </h2>
-
-        @forelse($ticket->histories->sortByDesc('created_at') as $history)
-
-            <div class="flex gap-4 mb-5">
+            flex
+            {{ $isAdmin
+            ? 'justify-end'
+            : 'justify-start' }}
+            ">
 
                 <div class="
-                w-10
-                h-10
-                rounded-full
-                bg-blue-500/20
-                flex
-                items-center
-                justify-center">
+                max-w-2xl
+                rounded-3xl
+                p-5
+                border
+                {{ $isAdmin
+                ? 'bg-green-500/20 border-green-300/20'
+                : 'bg-blue-500/20 border-blue-300/20'
+                }}">
 
-                    ⚡
-
-                </div>
-
-                <div class="
-                flex-1
-                bg-white/5
-                rounded-2xl
-                p-4">
-
-                    <div class="flex justify-between">
+                    <div class="mb-2">
 
                         <strong class="text-white">
-                            {{ $history->action }}
-                        </strong>
 
-                        <span class="text-sm text-slate-400">
-                            {{ $history->created_at->format('d/m/Y H:i') }}
-                        </span>
+                            {{ $comment->user->name }}
+
+                        </strong>
 
                     </div>
 
-                    <p class="text-blue-100 mt-2">
-                        {{ $history->description }}
-                    </p>
+                    <p class="text-white">
 
-                    <small class="text-slate-400">
-                        {{ $history->user?->name ?? 'Sistema' }}
-                    </small>
+                        {{ $comment->comment }}
+
+                    </p>
 
                 </div>
 
             </div>
 
-        @empty
+            @endforeach
 
-            <p class="text-slate-300">
-                Nenhum histórico encontrado.
-            </p>
+        </div>
 
-        @endforelse
+
+@if(!in_array($ticket->status,['Resolvido','Cancelado']))
+
+<form
+method="POST"
+action="{{ route('tickets.comments.store',$ticket) }}"
+class="mt-8">
+
+@csrf
+
+<textarea
+name="comment"
+rows="4"
+placeholder="Digite uma resposta..."
+class="w-full
+bg-white/10
+border border-white/20
+text-white
+rounded-2xl
+p-4"></textarea>
+
+<button
+type="submit"
+class="mt-4
+bg-blue-600
+text-white
+px-6
+py-3
+rounded-2xl">
+
+Enviar comentário
+
+</button>
+
+</form>
+
+@else
+
+<div class="mt-8
+bg-yellow-500/10
+border border-yellow-300/20
+text-yellow-100
+rounded-2xl
+p-5">
+
+Chamado encerrado.
+
+</div>
+
+@endif
 
     </div>
 
 </div>
+
+
+<script>
+
+const container=
+document.getElementById(
+'ticketContainer'
+);
+
+const ticketId=
+container.dataset.ticketId;
+
+let currentCount=
+parseInt(
+container.dataset.commentsCount
+);
+
+
+function playNotification(){
+
+    try{
+
+        const audio=
+        new Audio(
+        'https://actions.google.com/sounds/v1/alarms/notification.ogg'
+        );
+
+        audio.play();
+
+    }catch(e){}
+
+}
+
+
+function updateComments(){
+
+fetch(
+`/tickets/${ticketId}/comments/live`
+)
+
+.then(
+response=>
+response.json()
+)
+
+.then(data=>{
+
+if(
+data.count>
+currentCount
+){
+
+currentCount=
+data.count;
+
+playNotification();
+
+let html='';
+
+data.comments.forEach(comment=>{
+
+const isAdmin=
+comment.user.role==='admin';
+
+html +=`
+
+<div class="flex
+${isAdmin
+?'justify-end'
+:'justify-start'}">
+
+<div class="
+max-w-2xl
+rounded-3xl
+p-5
+border
+${isAdmin
+?'bg-green-500/20 border-green-300/20'
+:'bg-blue-500/20 border-blue-300/20'}">
+
+<div class="mb-2">
+
+<strong class="text-white">
+
+${comment.user.name}
+
+</strong>
+
+</div>
+
+<p class="text-white">
+
+${comment.comment}
+
+</p>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+'chatArea'
+).innerHTML=html;
+
+}
+
+});
+
+}
+
+setInterval(
+updateComments,
+5000
+);
+
+</script>
 
 </x-app-layout>

@@ -320,9 +320,32 @@
 
                             <td class="p-5">
                                 <div>
-                                    <p class="font-bold text-white text-lg">
-                                        #{{ $ticket->id }} - {{ $ticket->title }}
-                                    </p>
+                                    <div class="flex items-center gap-3 flex-wrap">
+
+                                        <p class="font-bold text-white text-lg">
+                                            #{{ $ticket->id }} - {{ $ticket->title }}
+                                        </p>
+
+                                        @if($ticket->unread_comments_count > 0)
+
+                                        <span
+                                            class="inline-flex items-center gap-2
+        bg-red-500/25
+        text-red-100
+        border border-red-300/30
+        rounded-full
+        px-3 py-1
+        text-xs
+        font-bold
+        shadow-[0_0_18px_rgba(239,68,68,.35)]">
+
+                                            🔴 {{ $ticket->unread_comments_count }}
+
+                                        </span>
+
+                                        @endif
+
+                                    </div>
 
                                     <p class="text-blue-200 text-sm mt-1">
                                         Criado em {{ $ticket->created_at->format('d/m/Y H:i') }}
@@ -436,13 +459,13 @@
 
                                     @if(Auth::user()->role === 'admin')
 
-                                    <a href="{{ route('tickets.edit', $ticket) }}"
-                                        class="action-btn inline-flex items-center gap-2 bg-blue-500/25 hover:bg-blue-500/40 text-blue-100 rounded-xl px-4 py-2 transition border border-blue-300/20 whitespace-nowrap">
+                                    <a href="{{ route('tickets.attend', $ticket) }}"
+                                        class="action-btn inline-flex items-center gap-2 bg-green-500/25 hover:bg-green-500/40 text-green-100 rounded-xl px-4 py-2 transition border border-green-300/20 whitespace-nowrap">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 5v14" />
                                         </svg>
-                                        Editar
+                                        Atender
                                     </a>
 
                                     <form action="{{ route('tickets.destroy', $ticket) }}"
