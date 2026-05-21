@@ -1,4 +1,4 @@
-# 🎧 HelpDesk Fácil
+# 🎧 HelpDesk
 
 Sistema web para abertura, acompanhamento e gerenciamento de chamados técnicos desenvolvido em Laravel.
 
