@@ -12,31 +12,40 @@ class TicketCommentController extends Controller
     public function store(
         Request $request,
         Ticket $ticket
-    )
-    {
+    ) {
+        if (
+            Auth::user()->role !== 'admin'
+            &&
+            $ticket->user_id !== Auth::id()
+        ) {
+            abort(403, 'Acesso negado.');
+        }
+
+        if (in_array($ticket->status, ['Resolvido', 'Cancelado'])) {
+            return redirect()
+                ->route('tickets.show', $ticket)
+                ->with(
+                    'success',
+                    'Este chamado está encerrado e não permite novos comentários.'
+                );
+        }
 
         $request->validate([
-            'comment' => 'required|string'
+            'comment' => 'required|string|max:2000'
         ]);
 
         TicketComment::create([
-
             'ticket_id' => $ticket->id,
-
             'user_id' => Auth::id(),
-
-            'comment' => $request->comment
-
+            'comment' => $request->comment,
+            'is_read' => false
         ]);
 
         return redirect()
-            ->route(
-                'tickets.show',
-                $ticket
-            )
+            ->route('tickets.show', $ticket)
             ->with(
                 'success',
-                'Comentário adicionado com sucesso!'
+                'Comentário enviado.'
             );
     }
 }

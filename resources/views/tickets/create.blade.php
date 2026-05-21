@@ -48,7 +48,10 @@
 
             </div>
 
-            <form method="POST" action="{{ route('tickets.store') }}" class="p-6">
+            <form method="POST"
+                  action="{{ route('tickets.store') }}"
+                  enctype="multipart/form-data"
+                  class="p-6">
 
                 @csrf
 
@@ -116,8 +119,61 @@
                         <textarea
                             rows="7"
                             name="description"
-                            placeholder="Descreva detalhadamente o problema..."
+                            placeholder="Descreva detalhadamente o problema."
                             class="w-full bg-white/10 border border-white/20 text-white rounded-2xl p-4 placeholder-blue-200 focus:border-blue-300 focus:ring-blue-300">{{ old('description') }}</textarea>
+
+                    </div>
+
+                    <div>
+
+                        <label class="block font-semibold text-blue-100 mb-2">
+                            Foto ou print do problema
+                        </label>
+
+                        <input
+                            type="file"
+                            id="attachmentInput"
+                            name="attachment"
+                            accept="image/*"
+                            class="w-full bg-white/10 border border-white/20 text-blue-100 rounded-2xl p-4
+                            file:mr-4
+                            file:py-2
+                            file:px-4
+                            file:rounded-xl
+                            file:border-0
+                            file:bg-blue-600
+                            file:text-white
+                            hover:file:bg-blue-500">
+
+                        <p class="text-sm text-blue-200 mt-2">
+                            Opcional. Envie uma imagem, print ou foto do erro para ajudar a equipe de suporte.
+                            Formatos aceitos: JPG, JPEG, PNG ou WEBP.
+                        </p>
+
+                        <div id="previewBox"
+                             class="hidden mt-5 bg-white/10 border border-white/20 rounded-2xl p-4">
+
+                            <p class="text-blue-100 font-semibold mb-3">
+                                Pré-visualização da imagem:
+                            </p>
+
+                            <img
+                                id="previewImage"
+                                src=""
+                                alt="Pré-visualização do anexo"
+                                class="max-w-sm w-full rounded-2xl border border-white/20 shadow-[0_0_25px_rgba(59,130,246,.25)]">
+
+                            <p class="text-sm text-blue-200 mt-3">
+                                Confira se esta é a imagem correta antes de abrir o chamado.
+                            </p>
+
+                        </div>
+
+                        @error('attachment')
+                            <p class="text-red-300 text-sm mt-2">
+                                {{ $message }}
+                            </p>
+                        @enderror
 
                     </div>
 
@@ -163,6 +219,10 @@
             const helperText = document.getElementById('helperText');
             const buttons = document.querySelectorAll('.action-btn');
 
+            const attachmentInput = document.getElementById('attachmentInput');
+            const previewBox = document.getElementById('previewBox');
+            const previewImage = document.getElementById('previewImage');
+
             const tips = {
                 "Acesso": "Problemas comuns: senha incorreta, bloqueio de acesso ou usuário sem permissão.",
                 "E-mail": "Problemas comuns: não recebe emails, erro ao enviar ou caixa cheia.",
@@ -176,7 +236,6 @@
                 "Software": "Problemas comuns: erros, travamentos, atualização ou instalação de programas."
             };
 
-            // Exibe ajuda conforme categoria selecionada
             category.addEventListener('change', function () {
                 const selectedName = category.options[category.selectedIndex].text.trim();
 
@@ -189,7 +248,24 @@
                 }
             });
 
-            // Efeito visual dos botões
+            attachmentInput.addEventListener('change', function () {
+                const file = attachmentInput.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (event) {
+                        previewImage.src = event.target.result;
+                        previewBox.classList.remove('hidden');
+                    };
+
+                    reader.readAsDataURL(file);
+                } else {
+                    previewImage.src = '';
+                    previewBox.classList.add('hidden');
+                }
+            });
+
             buttons.forEach(function (button) {
                 button.addEventListener('mouseenter', function () {
                     button.style.transform = 'scale(1.04)';

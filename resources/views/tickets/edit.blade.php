@@ -6,8 +6,8 @@
 
             <div class="w-16 h-16 rounded-3xl bg-blue-500/20 border border-blue-300/30 shadow-[0_0_30px_rgba(59,130,246,.40)] flex items-center justify-center">
                 <svg class="w-8 h-8 text-blue-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
                 </svg>
             </div>
 
@@ -24,13 +24,13 @@
         </div>
 
         @if ($errors->any())
-            <div class="bg-red-500/20 border border-red-300/30 text-red-100 p-4 rounded-2xl backdrop-blur-xl">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+        <div class="bg-red-500/20 border border-red-300/30 text-red-100 p-4 rounded-2xl backdrop-blur-xl">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
         @endif
 
         <div class="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl rounded-3xl border border-white/15 shadow-2xl overflow-hidden">
@@ -39,8 +39,8 @@
 
                 <div class="w-11 h-11 rounded-2xl bg-blue-500/20 border border-blue-300/30 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,.35)]">
                     <svg class="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
                     </svg>
                 </div>
 
@@ -67,12 +67,12 @@
                             class="w-full bg-white/10 border border-white/20 text-white rounded-2xl p-4 focus:border-blue-300 focus:ring-blue-300">
 
                             @foreach($categories as $category)
-                                <option
-                                    value="{{ $category->id }}"
-                                    class="text-slate-900"
-                                    {{ $ticket->category_id == $category->id ? 'selected' : '' }}>
-                                    {{ $category->name }}
-                                </option>
+                            <option
+                                value="{{ $category->id }}"
+                                class="text-slate-900"
+                                {{ $ticket->category_id == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
                             @endforeach
 
                         </select>
@@ -81,6 +81,40 @@
                             Escolha a categoria que melhor representa o problema relatado.
                         </p>
                     </div>
+
+                    <div>
+                        <label class="block font-semibold text-blue-100 mb-2">
+                            Responsável pelo chamado
+                        </label>
+
+                        <select
+                            name="assigned_to"
+                            class="w-full bg-white/10 border border-white/20 text-white rounded-2xl p-4 focus:border-blue-300 focus:ring-blue-300">
+
+                            <option value="" class="text-slate-900">
+                                Não atribuído
+                            </option>
+
+                            @foreach($users as $user)
+                            <option
+                                value="{{ $user->id }}"
+                                class="text-slate-900"
+                                {{ $ticket->assigned_to == $user->id ? 'selected' : '' }}>
+                                {{ $user->name }}
+                            </option>
+                            @endforeach
+
+                        </select>
+
+                        <p class="text-sm text-blue-200 mt-2">
+                            Defina quem ficará responsável por acompanhar este atendimento.
+                        </p>
+                    </div>
+
+
+
+
+
 
                     <div>
                         <label class="block font-semibold text-blue-100 mb-2">
@@ -191,7 +225,7 @@
                         </button>
 
                         <a href="{{ route('tickets.show', $ticket) }}"
-                           class="action-btn bg-white/10 hover:bg-white/20 text-white px-7 py-4 rounded-2xl font-bold border border-white/10 transition">
+                            class="action-btn bg-white/10 hover:bg-white/20 text-white px-7 py-4 rounded-2xl font-bold border border-white/10 transition">
                             Voltar
                         </a>
 
@@ -206,7 +240,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const buttons = document.querySelectorAll('.action-btn');
             const prioritySelect = document.getElementById('prioritySelect');
             const statusSelect = document.getElementById('statusSelect');
@@ -254,13 +288,13 @@
             updateHelpBox();
 
             // Efeito visual nos botões
-            buttons.forEach(function (button) {
-                button.addEventListener('mouseenter', function () {
+            buttons.forEach(function(button) {
+                button.addEventListener('mouseenter', function() {
                     button.style.transform = 'scale(1.04)';
                     button.style.boxShadow = '0 0 25px rgba(255,255,255,.15)';
                 });
 
-                button.addEventListener('mouseleave', function () {
+                button.addEventListener('mouseleave', function() {
                     button.style.transform = 'scale(1)';
                     button.style.boxShadow = '';
                 });
