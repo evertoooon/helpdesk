@@ -1,66 +1,260 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎧 HelpDesk Fácil
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema web para abertura, acompanhamento e gerenciamento de chamados técnicos desenvolvido em Laravel.
 
-## About Laravel
+O projeto permite que usuários registrem problemas ou solicitações, enquanto administradores e equipe de suporte podem acompanhar atendimentos, atualizar status, definir prioridades e interagir em tempo real através de um sistema de conversa integrado.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Projeto desenvolvido para a disciplina **ADS160 – Tópicos Especiais em Desenvolvimento de Software**, com evolução planejada para utilização em **Teste de Software**.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 📌 Inspirações
 
-## Learning Laravel
+O sistema foi inspirado em plataformas como:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Zendesk
+- GLPI
+- Jira Service Management
+- Freshdesk
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# 🚀 Tecnologias utilizadas
 
-## Laravel Sponsors
+### Back-end
+- PHP 8.1+
+- Laravel
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Front-end
+- Blade
+- Tailwind CSS
+- Vite
 
-### Premium Partners
+### Banco de dados
+- MySQL
+- phpMyAdmin
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Autenticação
+- Laravel Breeze
 
-## Contributing
+### Ambiente
+- XAMPP
+- Composer
+- Node.js
+- NPM
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Controle de versão
+- Git
+- GitHub
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 📂 Arquitetura utilizada
 
-## Security Vulnerabilities
+Estratégia de branches:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+main
+develop
+```
 
-## License
+- `main` → versão estável
+- `develop` → desenvolvimento
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+# ✨ Funcionalidades implementadas
+
+### Sistema geral
+
+✅ Sistema Admin/User  
+✅ Login personalizado  
+✅ Registro personalizado  
+✅ Perfil personalizado  
+✅ Dashboards separadas  
+✅ Controle de permissões  
+✅ Usuário visualiza apenas seus chamados  
+✅ Histórico automático  
+✅ Responsável pelo chamado (`assigned_to`)  
+✅ Categorias protegidas  
+✅ Exclusão protegida
+
+---
+
+### Chamados
+
+✅ Abertura de chamados  
+✅ Categorias  
+✅ Prioridade  
+✅ Status  
+✅ Responsável técnico  
+✅ Histórico de alterações  
+✅ Chamados resolvidos/cancelados
+
+---
+
+### Sistema de anexos
+
+✅ Upload de imagem  
+✅ Preview antes do envio  
+✅ Visualização da imagem  
+✅ Exibição no painel admin  
+✅ Exclusão automática do arquivo
+
+---
+
+### Atendimento
+
+✅ Tela "Atender Chamado"  
+✅ Botão Atender substituindo Editar  
+✅ Alteração de prioridade  
+✅ Alteração de status  
+✅ Atribuição de responsável
+
+---
+
+### Chat integrado
+
+✅ Conversa entre usuário e equipe  
+✅ Mensagens estilo chat  
+✅ Ordenação cronológica  
+✅ Contador de mensagens novas  
+✅ Sistema `is_read`  
+✅ Som de notificação  
+✅ Atualização automática sem F5  
+✅ Bloqueio ao resolver/cancelar chamado  
+✅ Backend protegido
+
+---
+
+# 🧠 Estrutura do banco
+
+Estrutura base:
+
+```text
+users
+categories
+tickets
+ticket_comments
+ticket_histories
+```
+
+Relacionamentos:
+
+Usuário → abre chamados
+
+Chamado → possui categoria
+
+Chamado → possui comentários
+
+Chamado → possui histórico
+
+Chamado → possui prioridade
+
+Chamado → possui status
+
+Chamado → possui responsável
+
+---
+
+# ⚙️ Instalação
+
+Clone o projeto:
+
+```bash
+git clone URL_DO_REPOSITORIO
+```
+
+Entre na pasta:
+
+```bash
+cd helpdesk-facil
+```
+
+Instale dependências:
+
+```bash
+composer install
+
+npm install
+```
+
+Configure:
+
+```bash
+cp .env.example .env
+```
+
+Gere a chave:
+
+```bash
+php artisan key:generate
+```
+
+Configure o banco `.env`
+
+Execute:
+
+```bash
+php artisan migrate
+
+php artisan storage:link
+```
+
+Inicie:
+
+```bash
+php artisan serve
+
+npm run dev
+```
+
+---
+
+# 🧪 Pensando em Teste de Software
+
+O projeto foi estruturado para facilitar:
+
+- testes unitários
+- testes funcionais
+- testes de integração
+- validações automatizadas
+
+Laravel já possui suporte nativo:
+
+```bash
+php artisan test
+```
+
+---
+
+# 📷 Imagens do projeto
+
+Em breve:
+
+- Login
+- Dashboard
+- Tela de chamados
+- Atendimento
+- Chat em tempo real
+
+---
+
+# 🔮 Melhorias futuras
+
+- Relatórios
+- Dashboard com gráficos
+- API REST
+- Notificações em tempo real
+- Login com múltiplos perfis
+- Exportação PDF
+- E-mail automático
+- WebSockets
+
+---
+
+# 👨‍💻 Autor
+
+Éverton Lima
+
+Projeto acadêmico desenvolvido em ADS.
