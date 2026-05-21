@@ -8,6 +8,7 @@ use App\Models\TicketHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
@@ -19,48 +20,32 @@ class TicketController extends Controller
             'assignedUser'
         ]);
 
-        // Usuário comum visualiza apenas os próprios chamados
         if (Auth::user()->role !== 'admin') {
             $query->where('user_id', Auth::id());
         }
 
         $tickets = $query
-
-            // Pesquisa por título
             ->when($request->search, function ($query) use ($request) {
-                $query->where(
-                    'title',
-                    'like',
-                    '%' . $request->search . '%'
-                );
+                $query->where('title', 'like', '%' . $request->search . '%');
             })
-
-            // Filtro por status
             ->when($request->status, function ($query) use ($request) {
-                $query->where(
-                    'status',
-                    $request->status
-                );
+                $query->where('status', $request->status);
             })
-
-            // Filtro por prioridade
             ->when($request->priority, function ($query) use ($request) {
-                $query->where(
-                    'priority',
-                    $request->priority
-                );
+                $query->where('priority', $request->priority);
             })
-
             ->latest()
             ->get();
 
-        return view(
-            'tickets.index',
-            compact('tickets')
-        );
+        return view('tickets.index', compact('tickets'));
     }
+
     public function show(Ticket $ticket)
     {
+        if (Auth::user()->role !== 'admin' && $ticket->user_id !== Auth::id()) {
+            abort(403, 'Acesso negado.');
+        }
+
         $ticket->load([
             'user',
             'assignedUser',
@@ -84,61 +69,53 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-
             'category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-
+            'attachment' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $ticket = Ticket::create([
+        $attachmentPath = null;
 
+        if ($request->hasFile('attachment')) {
+            $attachmentPath = $request
+                ->file('attachment')
+                ->store('ticket_attachments', 'public');
+        }
+
+        $ticket = Ticket::create([
             'user_id' => Auth::id(),
             'category_id' => $request->category_id,
             'title' => $request->title,
             'description' => $request->description,
-
+            'attachment' => $attachmentPath,
             'status' => 'Aberto',
             'priority' => 'Média'
-
         ]);
 
         TicketHistory::create([
-
             'ticket_id' => $ticket->id,
             'user_id' => Auth::id(),
-
             'action' => 'Chamado criado',
-
-            'description' =>
-            'Chamado aberto com status Aberto e prioridade inicial Média.'
-
+            'description' => 'Chamado aberto com status Aberto e prioridade inicial Média.'
         ]);
 
         return redirect()
             ->route('tickets.index')
-            ->with(
-                'success',
-                'Chamado aberto com sucesso.'
-            );
+            ->with('success', 'Chamado aberto com sucesso.');
     }
-
-
 
     public function edit(Ticket $ticket)
     {
         if (Auth::user()->role !== 'admin') {
-
             abort(403, 'Acesso negado.');
         }
-
 
         $categories = Category::where('active', true)
             ->orderBy('name')
             ->get();
 
-        $users = User::orderBy('name')
-            ->get();
+        $users = User::orderBy('name')->get();
 
         return view('tickets.edit', compact('ticket', 'categories', 'users'));
     }
@@ -146,9 +123,9 @@ class TicketController extends Controller
     public function update(Request $request, Ticket $ticket)
     {
         if (Auth::user()->role !== 'admin') {
-
             abort(403, 'Acesso negado.');
         }
+
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'assigned_to' => 'nullable|exists:users,id',
@@ -220,9 +197,13 @@ class TicketController extends Controller
     public function destroy(Ticket $ticket)
     {
         if (Auth::user()->role !== 'admin') {
-
             abort(403, 'Acesso negado.');
         }
+
+        if ($ticket->attachment) {
+            Storage::disk('public')->delete($ticket->attachment);
+        }
+
         $ticket->delete();
 
         return redirect()

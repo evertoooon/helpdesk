@@ -112,18 +112,58 @@
             p-6">
 
         <h2 class="text-2xl font-bold text-white mb-4">
-
             📝 Descrição
-
         </h2>
 
         <p class="text-blue-100 leading-8">
-
             {{ $ticket->description }}
-
         </p>
 
     </div>
+
+
+    <!-- ANEXO -->
+
+    @if($ticket->attachment)
+
+    <div class="
+            bg-white/10
+            backdrop-blur-xl
+            rounded-3xl
+            border border-white/10
+            p-6">
+
+        <h2 class="text-2xl font-bold text-white mb-5">
+            📷 Anexo do problema
+        </h2>
+
+        <p class="text-blue-200 mb-4">
+            Imagem enviada pelo usuário:
+        </p>
+
+        <a
+            href="{{ asset('storage/'.$ticket->attachment) }}"
+            target="_blank">
+
+            <img
+                src="{{ asset('storage/'.$ticket->attachment) }}"
+                class="
+                max-w-xl
+                rounded-3xl
+                border border-white/10
+                shadow-[0_0_35px_rgba(59,130,246,.25)]
+                hover:scale-[1.02]
+                transition duration-300">
+
+        </a>
+
+        <p class="text-sm text-slate-400 mt-4">
+            Clique na imagem para abrir em tamanho completo.
+        </p>
+
+    </div>
+
+    @endif
 
 
 
@@ -137,9 +177,7 @@
             p-6">
 
         <h2 class="text-xl font-bold text-white mb-6">
-
             💬 Comentários
-
         </h2>
 
         @forelse($ticket->comments as $comment)
@@ -153,23 +191,17 @@
                 <div class="flex justify-between">
 
                     <strong class="text-white">
-
                         {{ $comment->user->name }}
-
                     </strong>
 
                     <span class="text-slate-400 text-sm">
-
                         {{ $comment->created_at->format('d/m/Y H:i') }}
-
                     </span>
 
                 </div>
 
                 <p class="text-blue-100 mt-2">
-
                     {{ $comment->comment }}
-
                 </p>
 
             </div>
@@ -177,9 +209,7 @@
         @empty
 
             <p class="text-slate-300">
-
                 Nenhum comentário encontrado.
-
             </p>
 
         @endforelse
@@ -187,8 +217,7 @@
     </div>
 
 
-
-    <!-- Histórico automático de eventos do chamado -->
+    <!-- Histórico -->
 
     <div class="
             bg-white/10
@@ -199,9 +228,7 @@
             p-6">
 
         <h2 class="text-xl font-bold text-white mb-6">
-
             📜 Histórico do chamado
-
         </h2>
 
         @forelse($ticket->histories->sortByDesc('created_at') as $history)
@@ -213,7 +240,6 @@
                 h-10
                 rounded-full
                 bg-blue-500/20
-
                 flex
                 items-center
                 justify-center">
@@ -231,29 +257,21 @@
                     <div class="flex justify-between">
 
                         <strong class="text-white">
-
                             {{ $history->action }}
-
                         </strong>
 
                         <span class="text-sm text-slate-400">
-
                             {{ $history->created_at->format('d/m/Y H:i') }}
-
                         </span>
 
                     </div>
 
                     <p class="text-blue-100 mt-2">
-
                         {{ $history->description }}
-
                     </p>
 
                     <small class="text-slate-400">
-
                         {{ $history->user?->name ?? 'Sistema' }}
-
                     </small>
 
                 </div>
@@ -263,9 +281,7 @@
         @empty
 
             <p class="text-slate-300">
-
                 Nenhum histórico encontrado.
-
             </p>
 
         @endforelse
