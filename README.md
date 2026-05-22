@@ -6,221 +6,195 @@ O projeto permite que usuários registrem problemas ou solicitações, enquanto 
 
 Projeto desenvolvido para a disciplina **ADS160 – Tópicos Especiais em Desenvolvimento de Software**, com evolução planejada para utilização em **Teste de Software**.
 
+# 📸 Visão Geral
+
+O HelpDesk Fácil permite:
+
+- abertura de chamados;
+- comunicação entre usuários e técnicos;
+- gerenciamento de categorias;
+- controle de status e prioridades;
+- autenticação segura;
+- recuperação de senha;
+- upload de imagens/anexos;
+- API REST autenticada;
+- histórico completo de ações.
+
 ---
 
-## 📌 Inspirações
+# 🚀 Tecnologias Utilizadas
 
-O sistema foi inspirado em plataformas como:
-
-- Zendesk
-- GLPI
-- Jira Service Management
-- Freshdesk
-
----
-
-# 🚀 Tecnologias utilizadas
-
-### Back-end
 - PHP 8.1+
-- Laravel
-
-### Front-end
-- Blade
-- Tailwind CSS
-- Vite
-
-### Banco de dados
+- Laravel 10
 - MySQL
-- phpMyAdmin
-
-### Autenticação
+- Tailwind CSS
 - Laravel Breeze
-
-### Ambiente
-- XAMPP
-- Composer
-- Node.js
-- NPM
-
-### Controle de versão
-- Git
-- GitHub
+- Laravel Sanctum
+- Vite
+- Mailtrap
 
 ---
 
-# 📂 Arquitetura utilizada
+# 🔐 Funcionalidades
 
-Estratégia de branches:
+## 👤 Autenticação
 
-```bash
-main
-develop
-```
-
-- `main` → versão estável
-- `develop` → desenvolvimento
-
----
-
-# ✨ Funcionalidades implementadas
-
-### Sistema geral
-
-✅ Sistema Admin/User  
-✅ Login personalizado  
-✅ Registro personalizado  
-✅ Perfil personalizado  
-✅ Dashboards separadas  
-✅ Controle de permissões  
-✅ Usuário visualiza apenas seus chamados  
-✅ Histórico automático  
-✅ Responsável pelo chamado (`assigned_to`)  
-✅ Categorias protegidas  
-✅ Exclusão protegida
+- Login
+- Registro de usuários
+- Logout
+- Recuperação de senha
+- Redefinição de senha
+- Perfil do usuário
+- Exclusão de conta
 
 ---
 
-### Chamados
+## 🎫 Chamados
 
-✅ Abertura de chamados  
-✅ Categorias  
-✅ Prioridade  
-✅ Status  
-✅ Responsável técnico  
-✅ Histórico de alterações  
-✅ Chamados resolvidos/cancelados
-
----
-
-### Sistema de anexos
-
-✅ Upload de imagem  
-✅ Preview antes do envio  
-✅ Visualização da imagem  
-✅ Exibição no painel admin  
-✅ Exclusão automática do arquivo
+- Criar chamados
+- Editar chamados
+- Excluir chamados
+- Visualizar chamados
+- Controle de prioridade
+- Controle de status
+- Atribuição de responsável
+- Histórico de ações
+- Sistema de comentários/chat
+- Upload de imagens e prints
 
 ---
 
-### Atendimento
+## 👨‍💼 Administração
 
-✅ Tela "Atender Chamado"  
-✅ Botão Atender substituindo Editar  
-✅ Alteração de prioridade  
-✅ Alteração de status  
-✅ Atribuição de responsável
+Usuários administradores possuem acesso a:
 
----
-
-### Chat integrado
-
-✅ Conversa entre usuário e equipe  
-✅ Mensagens estilo chat  
-✅ Ordenação cronológica  
-✅ Contador de mensagens novas  
-✅ Sistema `is_read`  
-✅ Som de notificação  
-✅ Atualização automática sem F5  
-✅ Bloqueio ao resolver/cancelar chamado  
-✅ Backend protegido
+- gerenciamento de categorias;
+- visualização global de chamados;
+- atendimento de chamados;
+- controle de responsáveis;
+- acesso completo ao sistema.
 
 ---
 
-# 🧠 Estrutura do banco
+## 💬 Sistema de Comentários
 
-Estrutura base:
+Cada chamado possui um sistema de conversa integrado:
 
-```text
-users
-categories
-tickets
-ticket_comments
-ticket_histories
-```
-
-Relacionamentos:
-
-Usuário → abre chamados
-
-Chamado → possui categoria
-
-Chamado → possui comentários
-
-Chamado → possui histórico
-
-Chamado → possui prioridade
-
-Chamado → possui status
-
-Chamado → possui responsável
+- comentários em tempo real;
+- mensagens entre usuário e técnico;
+- indicador de mensagens não lidas;
+- bloqueio automático em chamados encerrados.
 
 ---
 
-# ⚙️ Instalação
+## 📂 Categorias
 
-Clone o projeto:
+O sistema possui gerenciamento completo de categorias:
 
-```bash
-git clone URL_DO_REPOSITORIO
-```
+- Hardware
+- Software
+- Rede
+- Impressora
+- Sistema
+- E-mail
+- Acesso
+- Segurança
+- Outros
 
-Entre na pasta:
+---
 
-```bash
-cd helpdesk-facil
-```
+# 📧 Recuperação de Senha
 
-Instale dependências:
+O projeto utiliza o **Mailtrap** para testes de envio de e-mails em ambiente de desenvolvimento.
 
-```bash
-composer install
+Ao solicitar recuperação de senha:
 
-npm install
-```
+1. o sistema envia o e-mail para o Mailtrap;
+2. o link de redefinição fica disponível na caixa de areia (sandbox);
+3. o usuário acessa o link diretamente pelo painel do Mailtrap.
 
-Configure:
+## Configuração SMTP
 
-```bash
-cp .env.example .env
-```
-
-Gere a chave:
-
-```bash
-php artisan key:generate
-```
-
-Configure o banco `.env`
-
-Execute:
-
-```bash
-php artisan migrate
-
-php artisan storage:link
-```
-
-Inicie:
-
-```bash
-php artisan serve
-
-npm run dev
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=SEU_USERNAME
+MAIL_PASSWORD=SUA_SENHA
+MAIL_ENCRYPTION=tls
 ```
 
 ---
 
-# 🧪 Pensando em Teste de Software
+# 🌐 API REST
 
-O projeto foi estruturado para facilitar:
+O sistema possui API autenticada com Laravel Sanctum.
 
-- testes unitários
-- testes funcionais
-- testes de integração
-- validações automatizadas
+## Autenticação
 
-Laravel já possui suporte nativo:
+```http
+POST /api/login
+```
+
+Retorna token de autenticação.
+
+---
+
+## Endpoints disponíveis
+
+### Listar chamados
+
+```http
+GET /api/tickets
+```
+
+### Visualizar chamado
+
+```http
+GET /api/tickets/{id}
+```
+
+### Criar chamado
+
+```http
+POST /api/tickets
+```
+
+### Atualizar chamado
+
+```http
+PUT /api/tickets/{id}
+```
+
+### Excluir chamado
+
+```http
+DELETE /api/tickets/{id}
+```
+
+### Comentar chamado
+
+```http
+POST /api/tickets/{id}/comments
+```
+
+---
+
+# 🧪 Testes Automatizados
+
+O projeto possui testes automatizados utilizando PHPUnit.
+
+Atualmente:
+
+- 33 testes automatizados;
+- 79 assertions;
+- testes de autenticação;
+- testes de permissões;
+- testes de API;
+- testes de validação;
+- testes de regras de negócio.
+
+Para executar:
 
 ```bash
 php artisan test
@@ -228,31 +202,145 @@ php artisan test
 
 ---
 
-# 📷 Imagens do projeto
+# ⚙️ Instalação do Projeto
 
-Em breve:
+## 1. Clonar repositório
 
-- Login
-- Dashboard
-- Tela de chamados
-- Atendimento
-- Chat em tempo real
+```bash
+git clone URL_DO_REPOSITORIO
+```
 
 ---
 
-# 🔮 Melhorias futuras
+## 2. Instalar dependências
 
-- Relatórios
-- Dashboard com gráficos
-- API REST
-- Notificações em tempo real
-- Login com múltiplos perfis
-- Exportação PDF
-- E-mail automático
-- WebSockets
+```bash
+composer install
+npm install
+```
 
 ---
 
+## 3. Configurar ambiente
+
+Copie o `.env.example`:
+
+```bash
+cp .env.example .env
+```
+
+---
+
+## 4. Gerar chave da aplicação
+
+```bash
+php artisan key:generate
+```
+
+---
+
+## 5. Configurar banco de dados
+
+Edite o `.env`:
+
+```env
+DB_DATABASE=helpdesk
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+---
+
+## 6. Executar migrations
+
+```bash
+php artisan migrate
+```
+
+---
+
+## 7. Popular categorias iniciais
+
+```bash
+php artisan db:seed --class=CategorySeeder
+```
+
+---
+
+## 8. Iniciar servidor
+
+```bash
+php artisan serve
+```
+
+---
+
+## 9. Rodar Vite
+
+```bash
+npm run dev
+```
+
+---
+
+# 👥 Tipos de Usuário
+
+## Usuário comum
+
+Pode:
+
+- abrir chamados;
+- comentar;
+- acompanhar atendimentos;
+- editar seus próprios chamados.
+
+---
+
+## Administrador
+
+Pode:
+
+- acessar todos os chamados;
+- atender chamados;
+- gerenciar categorias;
+- visualizar dashboards completos;
+- controlar o sistema.
+
+---
+
+# 📁 Estrutura Principal
+
+```text
+app/
+resources/views/
+routes/
+database/
+tests/
+public/
+storage/
+```
+
+---
+
+# 🎨 Interface
+
+O sistema utiliza:
+
+- visual neon;
+- glassmorphism;
+- efeitos blur;
+- gradientes;
+- componentes modernos com Tailwind CSS.
+
+---
+
+# 📌 Observações
+
+- O projeto foi desenvolvido para fins acadêmicos.
+- O Mailtrap é utilizado apenas em ambiente de desenvolvimento.
+- O sistema já possui base preparada para futuras expansões.
+
+---
 
 # 👨‍💻 Autor
 
