@@ -9,7 +9,6 @@
             </div>
 
             <div>
-
                 <h1 class="text-5xl font-bold bg-gradient-to-r from-green-300 via-white to-blue-300 bg-clip-text text-transparent">
                     Atender Chamado
                 </h1>
@@ -17,11 +16,9 @@
                 <p class="text-blue-100 mt-2">
                     Área administrativa do atendimento
                 </p>
-
             </div>
 
         </div>
-
 
         <div class="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/10 p-6">
 
@@ -41,7 +38,6 @@
                     </div>
                 </div>
 
-
                 <div>
                     <label class="text-blue-200">
                         Descrição
@@ -52,22 +48,21 @@
                     </div>
                 </div>
 
-
                 @if($ticket->attachment)
 
-                <div>
-                    <label class="text-blue-200">
-                        Imagem enviada
-                    </label>
+                    <div>
+                        <label class="text-blue-200">
+                            Imagem enviada
+                        </label>
 
-                    <a href="{{ asset('storage/'.$ticket->attachment) }}" target="_blank">
+                        <a href="{{ asset('storage/'.$ticket->attachment) }}" target="_blank">
 
-                        <img
-                            src="{{ asset('storage/'.$ticket->attachment) }}"
-                            class="mt-3 rounded-3xl max-w-md border border-white/10">
+                            <img
+                                src="{{ asset('storage/'.$ticket->attachment) }}"
+                                class="mt-3 rounded-3xl max-w-md border border-white/10">
 
-                    </a>
-                </div>
+                        </a>
+                    </div>
 
                 @endif
 
@@ -75,17 +70,14 @@
 
         </div>
 
-
-
         <div class="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/10 p-6">
 
-            <form method="POST" action="{{ route('tickets.updateAttendance',$ticket) }}">
+            <form method="POST" action="{{ route('tickets.updateAttendance', $ticket) }}">
 
                 @csrf
                 @method('PATCH')
 
                 <div class="space-y-6">
-
 
                     <div>
 
@@ -103,19 +95,18 @@
 
                             @foreach($users as $user)
 
-                            <option
-                                value="{{ $user->id }}"
-                                class="text-slate-900"
-                                {{ $ticket->assigned_to == $user->id ? 'selected' : '' }}>
-                                {{ $user->name }}
-                            </option>
+                                <option
+                                    value="{{ $user->id }}"
+                                    class="text-slate-900"
+                                    {{ $ticket->assigned_to == $user->id ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
 
                             @endforeach
 
                         </select>
 
                     </div>
-
 
                     <div class="grid md:grid-cols-2 gap-6">
 
@@ -149,7 +140,6 @@
 
                         </div>
 
-
                         <div>
 
                             <label class="block text-blue-100 mb-2">
@@ -182,41 +172,6 @@
 
                     </div>
 
-
-                    @if(!in_array($ticket->status, ['Resolvido', 'Cancelado']))
-
-                    <div>
-
-                        <label class="block text-blue-100 mb-2">
-                            Mensagem para usuário
-                        </label>
-
-                        <textarea
-                            name="comment"
-                            rows="5"
-                            placeholder="Ex: Testa agora a internet e me avisa."
-                            class="w-full bg-white/10 border border-white/20 text-white rounded-2xl p-4 placeholder-blue-200 focus:border-blue-300 focus:ring-blue-300"></textarea>
-
-                        @error('comment')
-                        <p class="text-red-300 text-sm mt-2">
-                            {{ $message }}
-                        </p>
-                        @enderror
-
-                    </div>
-
-                    @else
-
-                    <div class="bg-yellow-500/10 border border-yellow-300/20 text-yellow-100 rounded-2xl p-5">
-                        Este chamado está <strong>{{ $ticket->status }}</strong>. O envio de novas mensagens está desativado.
-                    </div>
-
-                    @endif
-
-
-
-                    <!-- Conversa do chamado -->
-
                     <div class="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/10 p-6">
 
                         <div class="flex items-center justify-between mb-6">
@@ -231,17 +186,17 @@
 
                         </div>
 
-                        <div class="space-y-5">
+                        <div id="commentsContainer" class="space-y-5">
 
                             @forelse($ticket->comments->sortBy('created_at') as $comment)
 
-                            @php
-                            $isAdmin = $comment->user->role === 'admin';
-                            @endphp
+                                @php
+                                    $isAdmin = $comment->user->role === 'admin';
+                                @endphp
 
-                            <div class="flex {{ $isAdmin ? 'justify-end' : 'justify-start' }}">
+                                <div class="flex {{ $isAdmin ? 'justify-end' : 'justify-start' }}">
 
-                                <div class="
+                                    <div class="
                                         max-w-2xl
                                         rounded-3xl
                                         p-5
@@ -251,52 +206,93 @@
                                             : 'bg-blue-500/20 border-blue-300/20 text-blue-50'
                                         }}">
 
-                                    <div class="flex items-center justify-between gap-6 mb-2">
+                                        <div class="flex items-center justify-between gap-6 mb-2">
 
-                                        <div>
+                                            <div>
 
-                                            <strong class="text-white">
-                                                {{ $comment->user->name }}
-                                            </strong>
+                                                <strong class="text-white">
+                                                    {{ $comment->user->name }}
+                                                </strong>
 
-                                            <span class="ml-2 text-xs px-3 py-1 rounded-full
+                                                <span class="ml-2 text-xs px-3 py-1 rounded-full
                                                     {{ $isAdmin
                                                         ? 'bg-green-400/20 text-green-100'
                                                         : 'bg-blue-400/20 text-blue-100'
                                                     }}">
 
-                                                {{ $isAdmin ? 'Equipe de suporte' : 'Solicitante' }}
+                                                    {{ $isAdmin ? 'Equipe de suporte' : 'Solicitante' }}
 
+                                                </span>
+
+                                            </div>
+
+                                            <span class="text-xs text-slate-300 whitespace-nowrap">
+                                                {{ $comment->created_at->format('d/m/Y H:i') }}
                                             </span>
 
                                         </div>
 
-                                        <span class="text-xs text-slate-300 whitespace-nowrap">
-                                            {{ $comment->created_at->format('d/m/Y H:i') }}
-                                        </span>
+                                        <p class="leading-7">
+                                            {{ $comment->comment }}
+                                        </p>
 
                                     </div>
 
-                                    <p class="leading-7">
-                                        {{ $comment->comment }}
-                                    </p>
-
                                 </div>
-
-                            </div>
 
                             @empty
 
-                            <p class="text-slate-300">
-                                Nenhum comentário encontrado.
-                            </p>
+                                <p class="text-slate-300">
+                                    Nenhum comentário encontrado.
+                                </p>
 
                             @endforelse
 
                         </div>
 
-                    </div>
+                        @if(!in_array($ticket->status, ['Resolvido', 'Cancelado']))
 
+                            <div class="mt-6 border-t border-white/10 pt-6">
+
+                                <label class="block text-blue-100 mb-2">
+                                    Mensagem para usuário
+                                </label>
+
+                                <textarea
+                                    name="comment"
+                                    rows="4"
+                                    placeholder="Digite uma mensagem para o usuário..."
+                                    class="w-full bg-white/10 border border-white/20 text-white rounded-2xl p-4 placeholder-blue-200 focus:border-blue-300 focus:ring-blue-300"></textarea>
+
+                                @error('comment')
+                                    <p class="text-red-300 text-sm mt-2">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+
+                                <div class="flex justify-end mt-4">
+
+                                    <button
+                                        type="submit"
+                                        class="bg-blue-600 hover:bg-blue-500 px-7 py-4 rounded-2xl text-white font-bold transition shadow-[0_0_20px_rgba(59,130,246,.35)]">
+
+                                        💬 Enviar mensagem
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        @else
+
+                            <div class="mt-6 bg-yellow-500/10 border border-yellow-300/20 text-yellow-100 rounded-2xl p-5">
+                                Este chamado está <strong>{{ $ticket->status }}</strong>. O envio de novas mensagens está desativado.
+                            </div>
+
+                        @endif
+
+                    </div>
 
                     <div class="flex flex-wrap gap-3">
 
@@ -304,12 +300,12 @@
                             type="submit"
                             class="bg-green-600 hover:bg-green-500 px-7 py-4 rounded-2xl text-white font-bold transition">
 
-                            Salvar atendimento
+                            💾 Salvar atendimento
 
                         </button>
 
                         <a
-                            href="{{ route('tickets.show',$ticket) }}"
+                            href="{{ route('tickets.show', $ticket) }}"
                             class="bg-white/10 hover:bg-white/20 px-7 py-4 rounded-2xl text-white border border-white/10 transition">
 
                             Voltar
@@ -342,7 +338,6 @@
                     ticketPage.dataset.commentsCount
                 );
 
-
             function playNotificationSound() {
 
                 try {
@@ -358,7 +353,6 @@
 
             }
 
-
             function renderComments(
                 comments
             ) {
@@ -373,70 +367,59 @@
 
                     html += `
 
-            <div class="flex
-            ${isAdmin
-            ?'justify-end'
-            :'justify-start'}">
+                        <div class="flex ${isAdmin ? 'justify-end' : 'justify-start'}">
 
-                <div class="
-                max-w-2xl
-                rounded-3xl
-                p-5
-                border
-                ${isAdmin
-                ?'bg-green-500/20 border-green-300/20 text-green-50'
-                :'bg-blue-500/20 border-blue-300/20 text-blue-50'}">
+                            <div class="
+                                max-w-2xl
+                                rounded-3xl
+                                p-5
+                                border
+                                ${isAdmin
+                                    ? 'bg-green-500/20 border-green-300/20 text-green-50'
+                                    : 'bg-blue-500/20 border-blue-300/20 text-blue-50'}">
 
-                    <div class="flex
-                    items-center
-                    justify-between
-                    gap-6
-                    mb-2">
+                                <div class="flex items-center justify-between gap-6 mb-2">
 
-                        <div>
+                                    <div>
 
-                        <strong
-                        class="text-white">
+                                        <strong class="text-white">
+                                            ${comment.user.name}
+                                        </strong>
 
-                        ${comment.user.name}
+                                        <span class="ml-2 text-xs px-3 py-1 rounded-full
+                                            ${isAdmin
+                                                ? 'bg-green-400/20 text-green-100'
+                                                : 'bg-blue-400/20 text-blue-100'}">
 
-                        </strong>
+                                            ${isAdmin ? 'Equipe de suporte' : 'Solicitante'}
 
-                        <span class="ml-2
-                        text-xs">
+                                        </span>
 
-                        ${
-                        isAdmin
-                        ?'Equipe de suporte'
-                        :'Solicitante'
-                        }
+                                    </div>
 
-                        </span>
+                                    <span class="text-xs text-slate-300 whitespace-nowrap">
+                                        ${comment.created_at_formatted ?? ''}
+                                    </span>
+
+                                </div>
+
+                                <p class="leading-7">
+                                    ${comment.comment}
+                                </p>
+
+                            </div>
 
                         </div>
 
-                    </div>
-
-                    <p class="leading-7">
-
-                    ${comment.comment}
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            `;
+                    `;
 
                 });
 
-                document.querySelector(
-                    '.space-y-5'
+                document.getElementById(
+                    'commentsContainer'
                 ).innerHTML = html;
 
             }
-
 
             setInterval(function() {
 
@@ -462,13 +445,11 @@
 
                     );
 
-
                 if (isTyping) {
 
                     return;
 
                 }
-
 
                 fetch(
 
