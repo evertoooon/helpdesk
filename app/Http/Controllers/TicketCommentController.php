@@ -9,23 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class TicketCommentController extends Controller
 {
-    public function store(
-        Request $request,
-        Ticket $ticket
-    ) {
+    public function store(Request $request, Ticket $ticket)
+    {
         if (
             Auth::user()->role !== 'admin'
             &&
             $ticket->user_id !== Auth::id()
         ) {
-            abort(403, 'Acesso negado.');
+            abort(403, 'Você não possui permissão para comentar neste chamado.');
         }
 
         if (in_array($ticket->status, ['Resolvido', 'Cancelado'])) {
             return redirect()
                 ->route('tickets.show', $ticket)
                 ->with(
-                    'success',
+                    'error',
                     'Este chamado está encerrado e não permite novos comentários.'
                 );
         }
@@ -45,7 +43,7 @@ class TicketCommentController extends Controller
             ->route('tickets.show', $ticket)
             ->with(
                 'success',
-                'Comentário enviado.'
+                'Comentário enviado com sucesso.'
             );
     }
 }
