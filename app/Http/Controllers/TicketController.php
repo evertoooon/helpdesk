@@ -41,7 +41,8 @@ class TicketController extends Controller
                 $query->where('priority', $request->priority);
             })
             ->latest()
-            ->get();
+            ->paginate(10)
+            ->appends($request->query());
 
         return view('tickets.index', compact('tickets'));
     }

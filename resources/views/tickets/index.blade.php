@@ -516,6 +516,20 @@
 
         </div>
 
+        <div class="p-6 border-t border-white/10">
+
+            <div class="pagination-wrapper">
+
+                {{ $tickets->links() }}
+
+            </div>
+
+        </div>
+
+
+
+
+
     </div>
 
     <script>
