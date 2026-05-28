@@ -1,117 +1,288 @@
-# 🎧 HelpDesk
+# 💜 HelpDesk
 
-Sistema web para abertura, acompanhamento e gerenciamento de chamados técnicos desenvolvido em Laravel.
+Sistema web moderno para abertura, gerenciamento e acompanhamento de chamados técnicos desenvolvido com Laravel 💻✨
 
-O projeto permite que usuários registrem problemas ou solicitações, enquanto administradores e equipe de suporte podem acompanhar atendimentos, atualizar status, definir prioridades e interagir em tempo real através de um sistema de conversa integrado.
+O projeto foi criado para a disciplina **ADS160 – Tópicos Especiais em Desenvolvimento de Software** e evoluído ao longo do semestre com foco em:
 
-Projeto desenvolvido para a disciplina **ADS160 – Tópicos Especiais em Desenvolvimento de Software**, com evolução planejada para utilização em **Teste de Software**.
+* arquitetura organizada;
+* autenticação segura;
+* experiência visual moderna;
+* comunicação em tempo real;
+* API REST;
+* testes automatizados;
+* boas práticas de desenvolvimento.
+
+---
 
 # 📸 Visão Geral
 
-O HelpDesk Fácil permite:
+O **HelpDesk Neon** permite que usuários registrem problemas, solicitações e dúvidas técnicas, enquanto administradores e equipe de suporte acompanham os atendimentos através de um painel moderno e interativo 💜
 
-- abertura de chamados;
-- comunicação entre usuários e técnicos;
-- gerenciamento de categorias;
-- controle de status e prioridades;
-- autenticação segura;
-- recuperação de senha;
-- upload de imagens/anexos;
-- API REST autenticada;
-- histórico completo de ações.
+---
+
+# ✨ Funcionalidades
+
+## 👤 Sistema de Autenticação
+
+* Login seguro
+* Registro de usuários
+* Logout
+* Recuperação de senha
+* Redefinição de senha
+* Perfil do usuário
+* Exclusão de conta
+* Controle de permissões por nível de acesso
+
+---
+
+## 🎫 Sistema de Chamados
+
+* Abertura de chamados
+* Visualização detalhada
+* Controle de status
+* Controle de prioridade
+* Upload de imagens/prints
+* Histórico completo de ações
+* Acompanhamento em tempo real
+* Paginação e filtros
+* Controle de chamados por usuário
+
+---
+
+## 💬 Chat em Tempo Real
+
+Cada chamado possui um sistema de conversa integrado entre usuário e suporte 💬
+
+### Recursos do chat:
+
+* atualização automática;
+* mensagens em tempo real;
+* indicador de mensagens não lidas;
+* separação visual entre usuário e suporte;
+* bloqueio automático em chamados encerrados;
+* proteção contra XSS;
+* renderização segura de mensagens.
+
+---
+
+## 👨‍💼 Área Administrativa
+
+Administradores possuem acesso completo ao sistema:
+
+* gerenciamento de categorias;
+* atendimento de chamados;
+* atualização de status;
+* atribuição de responsáveis;
+* dashboard administrativo;
+* visualização global do sistema;
+* exclusão de chamados;
+* controle operacional completo.
+
+---
+
+# 📂 Categorias
+
+O sistema já possui categorias padrão cadastradas:
+
+* Hardware
+* Software
+* Rede
+* Impressora
+* Sistema
+* E-mail
+* Acesso
+* Segurança
+* Outros
+
+---
+
+# 🌐 API REST
+
+O sistema possui API REST autenticada utilizando Laravel Sanctum 🔐
+
+## Autenticação
+
+```http
+POST /api/login
+```
+
+Retorna um token de autenticação.
+
+---
+
+## Endpoints disponíveis
+
+### 🎫 Chamados
+
+```http
+GET /api/tickets
+GET /api/tickets/{id}
+POST /api/tickets
+PUT /api/tickets/{id}
+DELETE /api/tickets/{id}
+```
+
+### 💬 Comentários
+
+```http
+POST /api/tickets/{id}/comments
+```
+
+---
+
+# 🧪 Testes Automatizados
+
+O projeto possui testes automatizados utilizando PHPUnit ✅
+
+### Cobertura atual:
+
+* testes de autenticação;
+* testes de permissões;
+* testes de API;
+* testes de validação;
+* testes de regras de negócio;
+* testes de integração;
+* testes do sistema de chamados.
+
+### Executar testes
+
+```bash
+php artisan test
+```
 
 ---
 
 # 🚀 Tecnologias Utilizadas
 
-- PHP 8.1+
-- Laravel 10
-- MySQL
-- Tailwind CSS
-- Laravel Breeze
-- Laravel Sanctum
-- Vite
-- Mailtrap
+## Backend
+
+* PHP 8.1+
+* Laravel 10
+* MySQL
+* Laravel Sanctum
+* PHPUnit
 
 ---
 
-# 🔐 Funcionalidades
+## Frontend
 
-## 👤 Autenticação
-
-- Login
-- Registro de usuários
-- Logout
-- Recuperação de senha
-- Redefinição de senha
-- Perfil do usuário
-- Exclusão de conta
+* Tailwind CSS
+* Vite
+* Blade
+* JavaScript
 
 ---
 
-## 🎫 Chamados
+## Ferramentas
 
-- Criar chamados
-- Editar chamados
-- Excluir chamados
-- Visualizar chamados
-- Controle de prioridade
-- Controle de status
-- Atribuição de responsável
-- Histórico de ações
-- Sistema de comentários/chat
-- Upload de imagens e prints
+* Mailtrap
+* Git
+* GitHub
+* Composer
+* NPM
 
 ---
 
-## 👨‍💼 Administração
+# ⚙️ Instalação do Projeto
 
-Usuários administradores possuem acesso a:
+## 1️⃣ Clonar repositório
 
-- gerenciamento de categorias;
-- visualização global de chamados;
-- atendimento de chamados;
-- controle de responsáveis;
-- acesso completo ao sistema.
+```bash
+git clone https://github.com/evertoooon/helpdesk
+```
 
 ---
 
-## 💬 Sistema de Comentários
+## 2️⃣ Acessar pasta
 
-Cada chamado possui um sistema de conversa integrado:
-
-- comentários em tempo real;
-- mensagens entre usuário e técnico;
-- indicador de mensagens não lidas;
-- bloqueio automático em chamados encerrados.
+```bash
+cd helpdesk
+```
 
 ---
 
-## 📂 Categorias
+## 3️⃣ Instalar dependências
 
-O sistema possui gerenciamento completo de categorias:
-
-- Hardware
-- Software
-- Rede
-- Impressora
-- Sistema
-- E-mail
-- Acesso
-- Segurança
-- Outros
+```bash
+composer install
+npm install
+```
 
 ---
 
-# 📧 Recuperação de Senha
+## 4️⃣ Configurar ambiente
 
-O projeto utiliza o **Mailtrap** para testes de envio de e-mails em ambiente de desenvolvimento.
+Copie o arquivo `.env.example`:
 
-Ao solicitar recuperação de senha:
+```bash
+cp .env.example .env
+```
 
-1. o sistema envia o e-mail para o Mailtrap;
-2. o link de redefinição fica disponível na caixa de areia (sandbox);
-3. o usuário acessa o link diretamente pelo painel do Mailtrap.
+---
+
+## 5️⃣ Gerar chave da aplicação
+
+```bash
+php artisan key:generate
+```
+
+---
+
+## 6️⃣ Configurar banco de dados
+
+Edite o `.env`:
+
+```env
+DB_DATABASE=helpdesk
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+---
+
+## 7️⃣ Executar migrations
+
+```bash
+php artisan migrate
+```
+
+---
+
+## 8️⃣ Popular banco com categorias iniciais
+
+```bash
+php artisan db:seed
+```
+
+---
+
+## 9️⃣ Criar link simbólico do storage
+
+```bash
+php artisan storage:link
+```
+
+---
+
+## 🔟 Iniciar servidor Laravel
+
+```bash
+php artisan serve
+```
+
+---
+
+## 1️⃣1️⃣ Rodar Vite
+
+```bash
+npm run dev
+```
+
+---
+
+# 🔐 Recuperação de Senha
+
+O projeto utiliza **Mailtrap** para testes de envio de e-mails em ambiente de desenvolvimento 📧
 
 ## Configuração SMTP
 
@@ -126,185 +297,42 @@ MAIL_ENCRYPTION=tls
 
 ---
 
-# 🌐 API REST
-
-O sistema possui API autenticada com Laravel Sanctum.
-
-## Autenticação
-
-```http
-POST /api/login
-```
-
-Retorna token de autenticação.
-
----
-
-## Endpoints disponíveis
-
-### Listar chamados
-
-```http
-GET /api/tickets
-```
-
-### Visualizar chamado
-
-```http
-GET /api/tickets/{id}
-```
-
-### Criar chamado
-
-```http
-POST /api/tickets
-```
-
-### Atualizar chamado
-
-```http
-PUT /api/tickets/{id}
-```
-
-### Excluir chamado
-
-```http
-DELETE /api/tickets/{id}
-```
-
-### Comentar chamado
-
-```http
-POST /api/tickets/{id}/comments
-```
-
----
-
-# 🧪 Testes Automatizados
-
-O projeto possui testes automatizados utilizando PHPUnit.
-
-Atualmente:
-
-- 33 testes automatizados;
-- 79 assertions;
-- testes de autenticação;
-- testes de permissões;
-- testes de API;
-- testes de validação;
-- testes de regras de negócio.
-
-Para executar:
-
-```bash
-php artisan test
-```
-
----
-
-# ⚙️ Instalação do Projeto
-
-## 1. Clonar repositório
-
-```bash
-git clone URL_DO_REPOSITORIO
-```
-
----
-
-## 2. Instalar dependências
-
-```bash
-composer install
-npm install
-```
-
----
-
-## 3. Configurar ambiente
-
-Copie o `.env.example`:
-
-```bash
-cp .env.example .env
-```
-
----
-
-## 4. Gerar chave da aplicação
-
-```bash
-php artisan key:generate
-```
-
----
-
-## 5. Configurar banco de dados
-
-Edite o `.env`:
-
-```env
-DB_DATABASE=helpdesk
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
----
-
-## 6. Executar migrations
-
-```bash
-php artisan migrate
-```
-
----
-
-## 7. Popular categorias iniciais
-
-```bash
-php artisan db:seed --class=CategorySeeder
-```
-
----
-
-## 8. Iniciar servidor
-
-```bash
-php artisan serve
-```
-
----
-
-## 9. Rodar Vite
-
-```bash
-npm run dev
-```
-
----
-
 # 👥 Tipos de Usuário
 
-## Usuário comum
+## 👤 Usuário comum
 
 Pode:
 
-- abrir chamados;
-- comentar;
-- acompanhar atendimentos;
-- editar seus próprios chamados.
+* abrir chamados;
+* comentar;
+* acompanhar atendimentos;
+* visualizar histórico;
+* acompanhar respostas do suporte.
 
 ---
 
-## Administrador
+## 👨‍💼 Administrador
 
 Pode:
 
-- acessar todos os chamados;
-- atender chamados;
-- gerenciar categorias;
-- visualizar dashboards completos;
-- controlar o sistema.
+* visualizar todos os chamados;
+* atender chamados;
+* alterar status e prioridade;
+* gerenciar categorias;
+* controlar responsáveis;
+* acessar dashboard completo;
+* excluir chamados.
+
+---
+
+# 🎨 Interface
+
+O sistema utiliza uma identidade visual moderna baseada em:
+
+* glassmorphism ✨
+* blur effects 🌌
+* gradientes 🎨
+* componentes modernos com Tailwind CSS
 
 ---
 
@@ -312,38 +340,45 @@ Pode:
 
 ```text
 app/
-resources/views/
-routes/
+bootstrap/
+config/
 database/
-tests/
 public/
+resources/
+routes/
 storage/
+tests/
 ```
 
 ---
 
-# 🎨 Interface
+# 🔒 Segurança
 
-O sistema utiliza:
+O projeto possui:
 
-- visual neon;
-- glassmorphism;
-- efeitos blur;
-- gradientes;
-- componentes modernos com Tailwind CSS.
+* autenticação segura;
+* proteção CSRF;
+* controle de permissões;
+* proteção contra XSS;
+* validações backend;
+* proteção de rotas administrativas;
+* upload validado de imagens.
 
 ---
 
 # 📌 Observações
 
-- O projeto foi desenvolvido para fins acadêmicos.
-- O Mailtrap é utilizado apenas em ambiente de desenvolvimento.
-- O sistema já possui base preparada para futuras expansões.
+* Projeto desenvolvido para fins acadêmicos 🎓
+* Estrutura preparada para futuras expansões 🚀
+* API pronta para integrações futuras 🔗
+* Sistema preparado para crescimento 📈
 
 ---
 
-# 👨‍💻 Autor
+# 💜 Autor
 
-Éverton Lima
+## Éverton Lima
 
-Projeto acadêmico desenvolvido em ADS.
+Projeto acadêmico desenvolvido em ADS com Laravel 💻✨
+
+Feito com dedicação, café ☕ e muitas linhas de código 💜

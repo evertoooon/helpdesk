@@ -9,19 +9,31 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-public function up(): void
-{
-    Schema::create('ticket_comments', function (Blueprint $table) {
-        $table->id();
+    public function up(): void
+    {
+        Schema::create('ticket_comments', function (Blueprint $table) {
+            $table->id();
 
-        $table->foreignId('ticket_id')->constrained()->onDelete('cascade');
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('ticket_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-        $table->text('comment');
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-        $table->timestamps();
-    });
-}
+            $table->text('comment');
+
+            $table->boolean('is_read')
+                ->default(false);
+
+            $table->timestamps();
+
+            $table->index('ticket_id');
+            $table->index('user_id');
+            $table->index('is_read');
+        });
+    }
 
     /**
      * Reverse the migrations.

@@ -2,7 +2,7 @@
 
     <div class="space-y-8">
 
-        <div class="flex items-center gap-5">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-5">
 
             <div class="w-16 h-16 rounded-3xl bg-blue-500/20 border border-blue-300/30 shadow-[0_0_30px_rgba(59,130,246,.45)] flex items-center justify-center">
                 <svg class="w-8 h-8 text-blue-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -12,7 +12,7 @@
             </div>
 
             <div>
-                <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-300 via-white to-purple-300 bg-clip-text text-transparent">
+                <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-300 via-white to-purple-300 bg-clip-text text-transparent break-words">
                     Meu Perfil
                 </h1>
 
@@ -25,7 +25,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-            <div class="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl rounded-3xl border border-white/15 shadow-2xl overflow-hidden">
+            <section class="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl rounded-3xl border border-white/15 shadow-2xl overflow-hidden">
 
                 <div class="p-6 border-b border-white/10 flex items-center gap-4">
 
@@ -52,9 +52,9 @@
                     @include('profile.partials.update-profile-information-form')
                 </div>
 
-            </div>
+            </section>
 
-            <div class="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl rounded-3xl border border-white/15 shadow-2xl overflow-hidden">
+            <section class="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl rounded-3xl border border-white/15 shadow-2xl overflow-hidden">
 
                 <div class="p-6 border-b border-white/10 flex items-center gap-4">
 
@@ -81,9 +81,9 @@
                     @include('profile.partials.update-password-form')
                 </div>
 
-            </div>
+            </section>
 
-            <div class="lg:col-span-2 bg-gradient-to-br from-red-500/15 to-white/5 backdrop-blur-xl rounded-3xl border border-red-300/20 shadow-2xl overflow-hidden">
+            <section class="lg:col-span-2 bg-gradient-to-br from-red-500/15 to-white/5 backdrop-blur-xl rounded-3xl border border-red-300/20 shadow-2xl overflow-hidden">
 
                 <div class="p-6 border-b border-white/10 flex items-center gap-4">
 
@@ -111,7 +111,7 @@
                     @include('profile.partials.delete-user-form')
                 </div>
 
-            </div>
+            </section>
 
         </div>
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\TicketComment;
 use App\Models\TicketHistory;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -14,14 +15,17 @@ class TicketApiController extends Controller
 {
     public function index()
     {
+        /** @var User $user */
+        $user = Auth::user();
+
         $query = Ticket::with([
             'category',
             'user',
-            'assignedUser'
+            'assignedUser',
         ]);
 
-        if (Auth::user()->role !== 'admin') {
-            $query->where('user_id', Auth::id());
+        if (!$user->isAdmin()) {
+            $query->where('user_id', $user->id);
         }
 
         $tickets = $query
@@ -31,20 +35,19 @@ class TicketApiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Chamados carregados com sucesso.',
-            'data' => $tickets
+            'data' => $tickets,
         ]);
     }
 
     public function show(Ticket $ticket)
     {
-        if (
-            Auth::user()->role !== 'admin'
-            &&
-            $ticket->user_id !== Auth::id()
-        ) {
+        /** @var User $user */
+        $user = Auth::user();
+
+        if (!$user->isAdmin() && $ticket->user_id !== $user->id) {
             return response()->json([
                 'success' => false,
-                'message' => 'Você não possui permissão para visualizar este chamado.'
+                'message' => 'Você não possui permissão para visualizar este chamado.',
             ], 403);
         }
 
@@ -53,19 +56,22 @@ class TicketApiController extends Controller
             'user',
             'assignedUser',
             'comments.user',
-            'histories.user'
+            'histories.user',
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Chamado carregado com sucesso.',
-            'data' => $ticket
+            'data' => $ticket,
         ]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        /** @var User $user */
+        $user = Auth::user();
+
+        $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -81,70 +87,90 @@ class TicketApiController extends Controller
         }
 
         $ticket = Ticket::create([
-            'user_id' => Auth::id(),
-            'category_id' => $request->category_id,
-            'title' => $request->title,
-            'description' => $request->description,
+            'user_id' => $user->id,
+            'category_id' => $validated['category_id'],
+            'title' => $validated['title'],
+            'description' => $validated['description'],
             'attachment' => $attachmentPath,
             'status' => 'Aberto',
-            'priority' => 'Média'
+            'priority' => 'Média',
         ]);
 
         TicketHistory::create([
             'ticket_id' => $ticket->id,
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'action' => 'Chamado criado via API',
-            'description' => 'Chamado aberto através da API com status Aberto e prioridade inicial Média.'
+            'description' => 'Chamado aberto através da API com status Aberto e prioridade inicial Média.',
+        ]);
+
+        $ticket->load([
+            'category',
+            'user',
+            'assignedUser',
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Chamado criado com sucesso.',
-            'data' => $ticket
+            'data' => $ticket,
         ], 201);
     }
 
     public function update(Request $request, Ticket $ticket)
     {
-        if (Auth::user()->role !== 'admin') {
+        /** @var User $user */
+        $user = Auth::user();
+
+        if (!$user->isAdmin()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Você não possui permissão para atualizar chamados.'
+                'message' => 'Você não possui permissão para atualizar chamados.',
             ], 403);
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'assigned_to' => 'nullable|exists:users,id',
             'priority' => 'required|in:Baixa,Média,Alta,Urgente',
             'status' => 'required|in:Aberto,Em andamento,Resolvido,Cancelado',
-            'comment' => 'nullable|string|max:2000'
+            'comment' => 'nullable|string|max:2000',
         ]);
+
+        if (
+            !empty($validated['comment'])
+            &&
+            in_array($validated['status'], ['Resolvido', 'Cancelado'])
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Não é possível enviar mensagens em chamados resolvidos ou cancelados.',
+            ], 400);
+        }
 
         $oldStatus = $ticket->status;
         $oldPriority = $ticket->priority;
         $oldAssignedTo = $ticket->assigned_to;
 
         $ticket->update([
-            'assigned_to' => $request->assigned_to,
-            'priority' => $request->priority,
-            'status' => $request->status
+            'assigned_to' => $validated['assigned_to'] ?? null,
+            'priority' => $validated['priority'],
+            'status' => $validated['status'],
         ]);
 
         if ($oldStatus !== $ticket->status) {
             TicketHistory::create([
                 'ticket_id' => $ticket->id,
-                'user_id' => Auth::id(),
+                'user_id' => $user->id,
                 'action' => 'Status alterado via API',
-                'description' => "O status foi alterado de {$oldStatus} para {$ticket->status} através da API."
+                'description' => "O status foi alterado de {$oldStatus} para {$ticket->status} através da API.",
             ]);
         }
 
         if ($oldPriority !== $ticket->priority) {
             TicketHistory::create([
                 'ticket_id' => $ticket->id,
-                'user_id' => Auth::id(),
+                'user_id' => $user->id,
                 'action' => 'Prioridade alterada via API',
-                'description' => "A prioridade foi alterada de {$oldPriority} para {$ticket->priority} através da API."
+                'description' => "A prioridade foi alterada de {$oldPriority} para {$ticket->priority} através da API.",
             ]);
         }
 
@@ -155,25 +181,18 @@ class TicketApiController extends Controller
 
             TicketHistory::create([
                 'ticket_id' => $ticket->id,
-                'user_id' => Auth::id(),
+                'user_id' => $user->id,
                 'action' => 'Responsável alterado via API',
-                'description' => "O responsável pelo chamado foi alterado para {$responsavel} através da API."
+                'description' => "O responsável pelo chamado foi alterado para {$responsavel} através da API.",
             ]);
         }
 
-        if ($request->filled('comment')) {
-            if (in_array($ticket->status, ['Resolvido', 'Cancelado'])) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Não é possível enviar mensagens em chamados resolvidos ou cancelados.'
-                ], 400);
-            }
-
+        if (!empty($validated['comment'])) {
             TicketComment::create([
                 'ticket_id' => $ticket->id,
-                'user_id' => Auth::id(),
-                'comment' => $request->comment,
-                'is_read' => false
+                'user_id' => $user->id,
+                'comment' => $validated['comment'],
+                'is_read' => false,
             ]);
         }
 
@@ -182,22 +201,25 @@ class TicketApiController extends Controller
             'user',
             'assignedUser',
             'comments.user',
-            'histories.user'
+            'histories.user',
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Chamado atualizado com sucesso.',
-            'data' => $ticket
+            'data' => $ticket,
         ]);
     }
 
     public function destroy(Ticket $ticket)
     {
-        if (Auth::user()->role !== 'admin') {
+        /** @var User $user */
+        $user = Auth::user();
+
+        if (!$user->isAdmin()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Você não possui permissão para excluir chamados.'
+                'message' => 'Você não possui permissão para excluir chamados.',
             ], 403);
         }
 
@@ -209,50 +231,46 @@ class TicketApiController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Chamado excluído com sucesso.'
+            'message' => 'Chamado excluído com sucesso.',
         ]);
     }
 
     public function comment(Request $request, Ticket $ticket)
     {
-        if (
-            Auth::user()->role !== 'admin'
-            &&
-            $ticket->user_id !== Auth::id()
-        ) {
+        /** @var User $user */
+        $user = Auth::user();
+
+        if (!$user->isAdmin() && $ticket->user_id !== $user->id) {
             return response()->json([
                 'success' => false,
-                'message' => 'Você não possui permissão para comentar neste chamado.'
+                'message' => 'Você não possui permissão para comentar neste chamado.',
             ], 403);
         }
 
-        if (
-            in_array(
-                $ticket->status,
-                ['Resolvido', 'Cancelado']
-            )
-        ) {
+        if (in_array($ticket->status, ['Resolvido', 'Cancelado'])) {
             return response()->json([
                 'success' => false,
-                'message' => 'Este chamado está encerrado e não permite novos comentários.'
+                'message' => 'Este chamado está encerrado e não permite novos comentários.',
             ], 400);
         }
 
-        $request->validate([
-            'comment' => 'required|string|max:2000'
+        $validated = $request->validate([
+            'comment' => 'required|string|max:2000',
         ]);
 
         $comment = TicketComment::create([
             'ticket_id' => $ticket->id,
-            'user_id' => Auth::id(),
-            'comment' => $request->comment,
-            'is_read' => false
+            'user_id' => $user->id,
+            'comment' => $validated['comment'],
+            'is_read' => false,
         ]);
+
+        $comment->load('user');
 
         return response()->json([
             'success' => true,
             'message' => 'Comentário enviado com sucesso.',
-            'data' => $comment
+            'data' => $comment,
         ], 201);
     }
 }

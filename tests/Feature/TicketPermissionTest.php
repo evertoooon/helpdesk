@@ -12,15 +12,47 @@ class TicketPermissionTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_cannot_access_ticket_from_another_user(): void
+    public function test_user_can_access_own_ticket(): void
     {
-        $owner = User::factory()->create();
-
-        $anotherUser = User::factory()->create();
+        $user = User::factory()->create([
+            'role' => User::ROLE_USER,
+        ]);
 
         $category = Category::create([
             'name' => 'Hardware',
-            'active' => true
+            'active' => true,
+        ]);
+
+        $ticket = Ticket::create([
+            'user_id' => $user->id,
+            'category_id' => $category->id,
+            'title' => 'Computador sem internet',
+            'description' => 'Não consigo acessar a rede.',
+            'status' => Ticket::STATUS_ABERTO,
+            'priority' => Ticket::PRIORITY_MEDIA,
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->get(route('tickets.show', $ticket));
+
+        $response->assertOk();
+        $response->assertSee('Computador sem internet');
+    }
+
+    public function test_user_cannot_access_ticket_from_another_user(): void
+    {
+        $owner = User::factory()->create([
+            'role' => User::ROLE_USER,
+        ]);
+
+        $anotherUser = User::factory()->create([
+            'role' => User::ROLE_USER,
+        ]);
+
+        $category = Category::create([
+            'name' => 'Hardware',
+            'active' => true,
         ]);
 
         $ticket = Ticket::create([
@@ -28,28 +60,30 @@ class TicketPermissionTest extends TestCase
             'category_id' => $category->id,
             'title' => 'Computador sem internet',
             'description' => 'Não consigo acessar a rede.',
-            'status' => 'Aberto',
-            'priority' => 'Média'
+            'status' => Ticket::STATUS_ABERTO,
+            'priority' => Ticket::PRIORITY_MEDIA,
         ]);
 
         $response = $this
             ->actingAs($anotherUser)
-            ->get("/tickets/{$ticket->id}");
+            ->get(route('tickets.show', $ticket));
 
-        $response->assertStatus(403);
+        $response->assertForbidden();
     }
 
     public function test_admin_can_access_ticket_from_any_user(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'role' => User::ROLE_USER,
+        ]);
 
         $admin = User::factory()->create([
-            'role' => 'admin'
+            'role' => User::ROLE_ADMIN,
         ]);
 
         $category = Category::create([
             'name' => 'Rede',
-            'active' => true
+            'active' => true,
         ]);
 
         $ticket = Ticket::create([
@@ -57,16 +91,15 @@ class TicketPermissionTest extends TestCase
             'category_id' => $category->id,
             'title' => 'Internet instável',
             'description' => 'A conexão está caindo frequentemente.',
-            'status' => 'Aberto',
-            'priority' => 'Média'
+            'status' => Ticket::STATUS_ABERTO,
+            'priority' => Ticket::PRIORITY_MEDIA,
         ]);
 
         $response = $this
             ->actingAs($admin)
-            ->get("/tickets/{$ticket->id}");
+            ->get(route('tickets.show', $ticket));
 
-        $response->assertStatus(200);
-
+        $response->assertOk();
         $response->assertSee('Internet instável');
     }
 }

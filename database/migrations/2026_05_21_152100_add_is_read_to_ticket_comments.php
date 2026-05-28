@@ -6,23 +6,37 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::table('ticket_comments', function (Blueprint $table) {
+        if (!Schema::hasColumn('ticket_comments', 'is_read')) {
 
-            $table->boolean('is_read')
-                ->default(false)
-                ->after('comment');
+            Schema::table('ticket_comments', function (Blueprint $table) {
 
-        });
+                $table->boolean('is_read')
+                    ->default(false)
+                    ->after('comment');
+
+            });
+
+        }
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::table('ticket_comments', function (Blueprint $table) {
+        if (Schema::hasColumn('ticket_comments', 'is_read')) {
 
-            $table->dropColumn('is_read');
+            Schema::table('ticket_comments', function (Blueprint $table) {
 
-        });
+                $table->dropColumn('is_read');
+
+            });
+
+        }
     }
 };

@@ -1,5 +1,4 @@
 <x-app-layout>
-    
 
     <div class="space-y-8 dashboard-user-page">
 
@@ -12,8 +11,8 @@
                         Olá,
                     </p>
 
-                    <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-300 via-white to-purple-300 bg-clip-text text-transparent mt-2">
-                        {{ Auth::user()->name }}
+                    <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-300 via-white to-purple-300 bg-clip-text text-transparent mt-2 break-words">
+                        {{ auth()->user()->name }}
                     </h1>
 
                     <p class="text-blue-100 mt-4 text-lg max-w-3xl">
@@ -34,17 +33,17 @@
 
             <div class="glass-card bg-gradient-to-br from-yellow-500/20 to-orange-950/30 backdrop-blur-xl rounded-3xl border border-yellow-300/30 p-7 shadow-[0_0_35px_rgba(245,158,11,0.20)]">
                 <p class="text-yellow-100">Meus chamados abertos</p>
-                <p class="counter text-5xl font-bold text-yellow-300 mt-2" data-target="{{ $myOpenTickets }}">0</p>
+                <p class="counter text-5xl font-bold text-yellow-300 mt-2" data-target="{{ $myOpenTickets ?? 0 }}">0</p>
             </div>
 
             <div class="glass-card bg-gradient-to-br from-purple-500/20 to-blue-950/30 backdrop-blur-xl rounded-3xl border border-purple-300/30 p-7 shadow-[0_0_35px_rgba(168,85,247,0.20)]">
                 <p class="text-purple-100">Em andamento</p>
-                <p class="counter text-5xl font-bold text-purple-300 mt-2" data-target="{{ $myProgressTickets }}">0</p>
+                <p class="counter text-5xl font-bold text-purple-300 mt-2" data-target="{{ $myProgressTickets ?? 0 }}">0</p>
             </div>
 
             <div class="glass-card bg-gradient-to-br from-green-500/20 to-emerald-950/30 backdrop-blur-xl rounded-3xl border border-green-300/30 p-7 shadow-[0_0_35px_rgba(34,197,94,0.20)]">
                 <p class="text-green-100">Resolvidos</p>
-                <p class="counter text-5xl font-bold text-green-300 mt-2" data-target="{{ $myResolvedTickets }}">0</p>
+                <p class="counter text-5xl font-bold text-green-300 mt-2" data-target="{{ $myResolvedTickets ?? 0 }}">0</p>
             </div>
 
         </div>
@@ -141,28 +140,25 @@
             const counters = document.querySelectorAll('.counter');
             const steps = document.querySelectorAll('.flow-step');
 
-            // Saudação conforme horário local
             const hour = new Date().getHours();
 
-            if (hour < 12) {
-                greeting.innerText = 'Bom dia,';
-            } else if (hour < 18) {
-                greeting.innerText = 'Boa tarde,';
-            } else {
-                greeting.innerText = 'Boa noite,';
+            if (greeting) {
+                if (hour < 12) {
+                    greeting.innerText = 'Bom dia,';
+                } else if (hour < 18) {
+                    greeting.innerText = 'Boa tarde,';
+                } else {
+                    greeting.innerText = 'Boa noite,';
+                }
             }
 
-            // Efeito de brilho nos cards
             cards.forEach(function (card) {
                 card.addEventListener('mousemove', function (event) {
                     const rect = card.getBoundingClientRect();
                     const x = event.clientX - rect.left;
                     const y = event.clientY - rect.top;
 
-                    card.style.background = `
-                        radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.18), transparent 35%),
-                        linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))
-                    `;
+                    card.style.background = 'radial-gradient(circle at ' + x + 'px ' + y + 'px, rgba(255,255,255,0.18), transparent 35%), linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))';
                 });
 
                 card.addEventListener('mouseleave', function () {
@@ -170,7 +166,6 @@
                 });
             });
 
-            // Efeito visual nos botões/cards clicáveis
             buttons.forEach(function (button) {
                 button.addEventListener('mouseenter', function () {
                     button.style.transform = 'scale(1.04)';
@@ -183,9 +178,8 @@
                 });
             });
 
-            // Animação suave dos contadores
             counters.forEach(function (counter) {
-                const target = Number(counter.dataset.target);
+                const target = Number(counter.dataset.target || 0);
                 let current = 0;
                 const duration = 900;
                 const start = performance.now();
@@ -206,7 +200,6 @@
                 requestAnimationFrame(animateCounter);
             });
 
-            // Entrada suave do fluxo
             steps.forEach(function (step, index) {
                 step.style.opacity = '0';
                 step.style.transform = 'translateY(14px)';

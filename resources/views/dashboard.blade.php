@@ -1,12 +1,26 @@
 <x-app-layout>
 
     @php
-        $totalTickets = $totalTickets ?? \App\Models\Ticket::count();
-        $openTickets = $openTickets ?? \App\Models\Ticket::where('status', 'Aberto')->count();
-        $progressTickets = $progressTickets ?? \App\Models\Ticket::where('status', 'Em andamento')->count();
-        $resolvedTickets = $resolvedTickets ?? \App\Models\Ticket::where('status', 'Resolvido')->count();
-    @endphp
+    $totalTickets = $totalTickets ?? \App\Models\Ticket::count();
 
+    $openTickets = $openTickets
+    ?? \App\Models\Ticket::where(
+    'status',
+    \App\Models\Ticket::STATUS_ABERTO
+    )->count();
+
+    $progressTickets = $progressTickets
+    ?? \App\Models\Ticket::where(
+    'status',
+    \App\Models\Ticket::STATUS_EM_ANDAMENTO
+    )->count();
+
+    $resolvedTickets = $resolvedTickets
+    ?? \App\Models\Ticket::where(
+    'status',
+    \App\Models\Ticket::STATUS_RESOLVIDO
+    )->count();
+    @endphp
     <div class="space-y-8 dashboard-page">
 
         <div class="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl rounded-3xl border border-white/15 shadow-2xl overflow-hidden hero-card">
@@ -18,8 +32,8 @@
                         Olá,
                     </p>
 
-                    <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-300 via-white to-purple-300 bg-clip-text text-transparent mt-2">
-                        {{ Auth::user()->name }}
+                    <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-300 via-white to-purple-300 bg-clip-text text-transparent mt-2 break-words">
+                        {{ auth()->user()->name }}
                     </h1>
 
                     <p class="text-blue-100 mt-4 text-lg max-w-3xl">
@@ -29,7 +43,7 @@
 
                 <div class="w-28 h-28 rounded-3xl bg-blue-500/20 border border-blue-300/30 shadow-[0_0_35px_rgba(59,130,246,.45)] flex items-center justify-center">
                     <svg class="w-14 h-14 text-blue-200" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6M9 16h6M7 4h10a2 2 0 012 2v14l-4-2-3 2-3-2-4 2V6a2 2 0 012-2z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6M9 16h6M7 4h10a2 2 0 012 2v14l-4-2-3 2-3-2-4 2V6a2 2 0 012-2z" />
                     </svg>
                 </div>
 
@@ -71,11 +85,11 @@
                 </p>
             </a>
 
-            <a href="{{ route('tickets.create') }}" class="action-btn glass-card block bg-white/10 border border-white/10 rounded-3xl p-6 backdrop-blur-xl transition">
-                <p class="text-green-200">Atendimento</p>
-                <h2 class="text-3xl font-bold text-white mt-2">Abrir chamado</h2>
+            <a href="{{ route('categories.index') }}" class="action-btn glass-card block bg-white/10 border border-white/10 rounded-3xl p-6 backdrop-blur-xl transition">
+                <p class="text-green-200">Administração</p>
+                <h2 class="text-3xl font-bold text-white mt-2">Categorias</h2>
                 <p class="text-blue-100 mt-3">
-                    Registre um novo problema para análise da equipe.
+                    Gerencie categorias utilizadas na abertura dos chamados.
                 </p>
             </a>
 
@@ -120,7 +134,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const greeting = document.getElementById('greeting');
             const cards = document.querySelectorAll('.glass-card');
             const buttons = document.querySelectorAll('.action-btn');
@@ -129,45 +143,44 @@
 
             const hour = new Date().getHours();
 
-            if (hour < 12) {
-                greeting.innerText = 'Bom dia,';
-            } else if (hour < 18) {
-                greeting.innerText = 'Boa tarde,';
-            } else {
-                greeting.innerText = 'Boa noite,';
+            if (greeting) {
+                if (hour < 12) {
+                    greeting.innerText = 'Bom dia,';
+                } else if (hour < 18) {
+                    greeting.innerText = 'Boa tarde,';
+                } else {
+                    greeting.innerText = 'Boa noite,';
+                }
             }
 
-            cards.forEach(function (card) {
-                card.addEventListener('mousemove', function (event) {
+            cards.forEach(function(card) {
+                card.addEventListener('mousemove', function(event) {
                     const rect = card.getBoundingClientRect();
                     const x = event.clientX - rect.left;
                     const y = event.clientY - rect.top;
 
-                    card.style.background = `
-                        radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.18), transparent 35%),
-                        linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))
-                    `;
+                    card.style.background = 'radial-gradient(circle at ' + x + 'px ' + y + 'px, rgba(255,255,255,0.18), transparent 35%), linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))';
                 });
 
-                card.addEventListener('mouseleave', function () {
+                card.addEventListener('mouseleave', function() {
                     card.style.background = '';
                 });
             });
 
-            buttons.forEach(function (button) {
-                button.addEventListener('mouseenter', function () {
+            buttons.forEach(function(button) {
+                button.addEventListener('mouseenter', function() {
                     button.style.transform = 'scale(1.04)';
                     button.style.boxShadow = '0 0 25px rgba(255,255,255,.15)';
                 });
 
-                button.addEventListener('mouseleave', function () {
+                button.addEventListener('mouseleave', function() {
                     button.style.transform = 'scale(1)';
                     button.style.boxShadow = '';
                 });
             });
 
-            counters.forEach(function (counter) {
-                const target = Number(counter.dataset.target);
+            counters.forEach(function(counter) {
+                const target = Number(counter.dataset.target || 0);
                 let current = 0;
                 const duration = 900;
                 const start = performance.now();
@@ -188,11 +201,11 @@
                 requestAnimationFrame(animateCounter);
             });
 
-            steps.forEach(function (step, index) {
+            steps.forEach(function(step, index) {
                 step.style.opacity = '0';
                 step.style.transform = 'translateY(14px)';
 
-                setTimeout(function () {
+                setTimeout(function() {
                     step.style.transition = 'opacity 450ms ease, transform 450ms ease';
                     step.style.opacity = '1';
                     step.style.transform = 'translateY(0)';

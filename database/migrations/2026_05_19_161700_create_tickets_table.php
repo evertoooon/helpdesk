@@ -9,22 +9,45 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-  public function up(): void
-{
-    Schema::create('tickets', function (Blueprint $table) {
-        $table->id();
+    public function up(): void
+    {
+        Schema::create('tickets', function (Blueprint $table) {
+            $table->id();
 
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-        $table->string('title');
-        $table->text('description');
-        $table->string('priority')->default('Média');
-        $table->string('status')->default('Aberto');
+            $table->foreignId('category_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-        $table->timestamps();
-    });
-}
+            $table->foreignId('assigned_to')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
+
+            $table->string('title');
+            $table->text('description');
+
+            $table->string('priority')
+                ->default('Média');
+
+            $table->string('status')
+                ->default('Aberto');
+
+            $table->string('attachment')
+                ->nullable();
+
+            $table->timestamps();
+
+            $table->index('status');
+            $table->index('priority');
+            $table->index('user_id');
+            $table->index('assigned_to');
+        });
+    }
+
     /**
      * Reverse the migrations.
      */

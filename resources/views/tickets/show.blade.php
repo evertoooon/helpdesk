@@ -1,9 +1,10 @@
 <x-app-layout>
 
-    <div class="space-y-8"
-         id="ticketContainer"
-         data-ticket-id="{{ $ticket->id }}"
-         data-comments-count="{{ $ticket->comments->count() }}">
+    <div
+        class="space-y-8"
+        id="ticketContainer"
+        data-comments-count="{{ $ticket->comments->count() }}"
+        data-live-url="{{ route('tickets.comments.live', $ticket) }}">
 
         <!-- Cabeçalho -->
 
@@ -29,7 +30,7 @@
 
                     <div>
 
-                        <h1 class="text-4xl font-bold text-white">
+                        <h1 class="text-4xl font-bold text-white break-words">
                             {{ $ticket->title }}
                         </h1>
 
@@ -93,7 +94,7 @@
 
             </a>
 
-            @if(auth()->user()->role === 'admin')
+            @if(auth()->user()->isAdmin())
 
                 <a href="{{ route('tickets.attend', $ticket) }}"
                    class="inline-flex items-center gap-2
@@ -127,7 +128,7 @@
                             Título
                         </label>
 
-                        <p class="text-white text-xl font-semibold mt-1">
+                        <p class="text-white text-xl font-semibold mt-1 break-words">
                             {{ $ticket->title }}
                         </p>
 
@@ -139,7 +140,7 @@
                             Descrição
                         </label>
 
-                        <p class="text-white leading-7 mt-1">
+                        <p class="text-white leading-7 mt-1 whitespace-pre-line break-words">
                             {{ $ticket->description }}
                         </p>
 
@@ -153,11 +154,15 @@
                                 Imagem enviada
                             </label>
 
-                            <a href="{{ asset('storage/'.$ticket->attachment) }}" target="_blank">
+                            <a
+                                href="{{ asset('storage/' . $ticket->attachment) }}"
+                                target="_blank"
+                                rel="noopener noreferrer">
 
                                 <img
-                                    src="{{ asset('storage/'.$ticket->attachment) }}"
-                                    class="mt-3 rounded-3xl max-w-md border border-white/10 shadow-lg">
+                                    src="{{ asset('storage/' . $ticket->attachment) }}"
+                                    alt="Imagem anexada ao chamado"
+                                    class="mt-3 rounded-3xl w-full max-w-md border border-white/10 shadow-lg">
 
                             </a>
 
@@ -178,87 +183,59 @@
                 <div class="space-y-5">
 
                     <div>
-
-                        <label class="text-blue-200 text-sm">
-                            Solicitante
-                        </label>
+                        <label class="text-blue-200 text-sm">Solicitante</label>
 
                         <p class="text-white font-semibold mt-1">
                             {{ $ticket->user->name ?? 'Não informado' }}
                         </p>
-
                     </div>
 
                     <div>
-
-                        <label class="text-blue-200 text-sm">
-                            Categoria
-                        </label>
+                        <label class="text-blue-200 text-sm">Categoria</label>
 
                         <p class="text-white font-semibold mt-1">
                             {{ $ticket->category->name ?? 'Sem categoria' }}
                         </p>
-
                     </div>
 
                     <div>
-
-                        <label class="text-blue-200 text-sm">
-                            Responsável
-                        </label>
+                        <label class="text-blue-200 text-sm">Responsável</label>
 
                         <p class="text-white font-semibold mt-1">
                             {{ $ticket->assignedUser->name ?? 'Não atribuído' }}
                         </p>
-
                     </div>
 
                     <div>
-
-                        <label class="text-blue-200 text-sm">
-                            Prioridade
-                        </label>
+                        <label class="text-blue-200 text-sm">Prioridade</label>
 
                         <p class="text-white font-semibold mt-1">
                             {{ $ticket->priority }}
                         </p>
-
                     </div>
 
                     <div>
-
-                        <label class="text-blue-200 text-sm">
-                            Status
-                        </label>
+                        <label class="text-blue-200 text-sm">Status</label>
 
                         <p class="text-white font-semibold mt-1">
                             {{ $ticket->status }}
                         </p>
-
                     </div>
 
                     <div>
-
-                        <label class="text-blue-200 text-sm">
-                            Criado em
-                        </label>
+                        <label class="text-blue-200 text-sm">Criado em</label>
 
                         <p class="text-white font-semibold mt-1">
                             {{ $ticket->created_at->format('d/m/Y H:i') }}
                         </p>
-
                     </div>
 
                     <div>
-
-                        <label class="text-blue-200 text-sm">
-                            Última atualização
-                        </label>
+                        <label class="text-blue-200 text-sm">Última atualização</label>
 
                         <p class="text-white font-semibold mt-1">
                             {{ $ticket->updated_at->format('d/m/Y H:i') }}
                         </p>
-
                     </div>
 
                 </div>
@@ -284,21 +261,17 @@
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
 
                             <div>
-
                                 <p class="text-white font-bold">
                                     {{ $history->action }}
                                 </p>
 
-                                <p class="text-blue-100 mt-1">
+                                <p class="text-blue-100 mt-1 whitespace-pre-line break-words">
                                     {{ $history->description }}
                                 </p>
-
                             </div>
 
                             <div class="text-sm text-blue-200 whitespace-nowrap">
-
                                 {{ $history->created_at->format('d/m/Y H:i') }}
-
                             </div>
 
                         </div>
@@ -329,13 +302,13 @@
             border border-white/10
             p-6">
 
-            <div class="flex items-center justify-between mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
 
                 <h2 class="text-xl font-bold text-white">
                     💬 Conversa do chamado
                 </h2>
 
-                <span class="text-xs text-blue-200 bg-white/10 border border-white/10 rounded-full px-3 py-1">
+                <span class="text-xs text-blue-200 bg-white/10 border border-white/10 rounded-full px-3 py-1 w-fit">
                     Atualiza automaticamente a cada 5s
                 </span>
 
@@ -346,7 +319,7 @@
                 @forelse($ticket->comments->sortBy('created_at') as $comment)
 
                     @php
-                        $isAdmin = $comment->user->role === 'admin';
+                        $isAdmin = $comment->user?->isAdmin() ?? false;
                     @endphp
 
                     <div class="flex {{ $isAdmin ? 'justify-end' : 'justify-start' }}">
@@ -361,12 +334,12 @@
                                 : 'bg-blue-500/20 border-blue-300/20'
                             }}">
 
-                            <div class="flex items-center justify-between gap-6 mb-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
 
                                 <div>
 
                                     <strong class="text-white">
-                                        {{ $comment->user->name }}
+                                        {{ $comment->user?->name ?? 'Usuário removido' }}
                                     </strong>
 
                                     <span class="ml-2 text-xs px-3 py-1 rounded-full
@@ -387,7 +360,7 @@
 
                             </div>
 
-                            <p class="text-white leading-7">
+                            <p class="text-white leading-7 whitespace-pre-line break-words">
                                 {{ $comment->comment }}
                             </p>
 
@@ -405,7 +378,7 @@
 
             </div>
 
-            @if(!in_array($ticket->status, ['Resolvido', 'Cancelado']))
+            @if(!$ticket->isClosed())
 
                 <form
                     method="POST"
@@ -421,6 +394,7 @@
                     <textarea
                         name="comment"
                         rows="4"
+                        maxlength="2000"
                         placeholder="Digite uma resposta..."
                         class="w-full
                         bg-white/10
@@ -430,7 +404,7 @@
                         p-4
                         placeholder-blue-200
                         focus:border-blue-300
-                        focus:ring-blue-300"></textarea>
+                        focus:ring-blue-300">{{ old('comment') }}</textarea>
 
                     @error('comment')
                         <p class="text-red-300 text-sm mt-2">
@@ -472,150 +446,178 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('ticketContainer');
+            const chatArea = document.getElementById('chatArea');
 
-        const container =
-            document.getElementById(
-                'ticketContainer'
-            );
-
-        const ticketId =
-            container.dataset.ticketId;
-
-        let currentCount =
-            parseInt(
-                container.dataset.commentsCount
-            );
-
-        function playNotification() {
-
-            try {
-
-                const audio =
-                    new Audio(
-                        'https://actions.google.com/sounds/v1/alarms/notification.ogg'
-                    );
-
-                audio.play();
-
-            } catch(e) {}
-
-        }
-
-        function renderComments(comments) {
-
-            let html = '';
-
-            comments.forEach(comment => {
-
-                const isAdmin =
-                    comment.user.role === 'admin';
-
-                html += `
-
-                    <div class="flex ${isAdmin ? 'justify-end' : 'justify-start'}">
-
-                        <div class="
-                            max-w-2xl
-                            rounded-3xl
-                            p-5
-                            border
-                            ${isAdmin
-                                ? 'bg-green-500/20 border-green-300/20'
-                                : 'bg-blue-500/20 border-blue-300/20'}">
-
-                            <div class="flex items-center justify-between gap-6 mb-2">
-
-                                <div>
-
-                                    <strong class="text-white">
-                                        ${comment.user.name}
-                                    </strong>
-
-                                    <span class="ml-2 text-xs px-3 py-1 rounded-full
-                                        ${isAdmin
-                                            ? 'bg-green-400/20 text-green-100'
-                                            : 'bg-blue-400/20 text-blue-100'}">
-
-                                        ${isAdmin ? 'Equipe de suporte' : 'Solicitante'}
-
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                            <p class="text-white leading-7">
-                                ${comment.comment}
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            });
-
-            document.getElementById(
-                'chatArea'
-            ).innerHTML = html;
-
-        }
-
-        function updateComments() {
-
-            const activeElement =
-                document.activeElement;
-
-            const isTyping =
-                activeElement && (
-                    activeElement.tagName === 'TEXTAREA'
-                    ||
-                    activeElement.tagName === 'INPUT'
-                    ||
-                    activeElement.tagName === 'SELECT'
-                );
-
-            if (isTyping) {
+            if (!container || !chatArea) {
                 return;
             }
 
-            fetch(
-                `/tickets/${ticketId}/comments/live`
-            )
+            const liveUrl = container.dataset.liveUrl;
+            let currentCount = Number(container.dataset.commentsCount || 0);
+            let isUpdating = false;
 
-            .then(
-                response =>
-                response.json()
-            )
+            function createElement(tag, className = '', text = '') {
+                const element = document.createElement(tag);
 
-            .then(data => {
-
-                if (
-                    data.count >
-                    currentCount
-                ) {
-
-                    currentCount =
-                        data.count;
-
-                    playNotification();
-
-                    renderComments(
-                        data.comments
-                    );
-
+                if (className) {
+                    element.className = className;
                 }
 
-            });
+                if (text !== '') {
+                    element.textContent = text;
+                }
 
-        }
+                return element;
+            }
 
-        setInterval(
-            updateComments,
-            5000
-        );
+            function playNotification() {
+                try {
+                    const audio = new Audio(
+                        'https://actions.google.com/sounds/v1/alarms/notification.ogg'
+                    );
 
+                    audio.play().catch(function () {});
+                } catch (error) {}
+            }
+
+            function renderEmptyMessages() {
+                chatArea.innerHTML = '';
+
+                chatArea.appendChild(
+                    createElement(
+                        'p',
+                        'text-slate-300',
+                        'Nenhuma mensagem encontrada.'
+                    )
+                );
+            }
+
+            function renderComments(comments) {
+                chatArea.innerHTML = '';
+
+                if (!Array.isArray(comments) || comments.length === 0) {
+                    renderEmptyMessages();
+                    return;
+                }
+
+                comments.forEach(function (comment) {
+                    const user = comment.user || {};
+                    const isAdmin = user.role === 'admin';
+
+                    const wrapper = createElement(
+                        'div',
+                        isAdmin ? 'flex justify-end' : 'flex justify-start'
+                    );
+
+                    const bubble = createElement(
+                        'div',
+                        isAdmin
+                            ? 'max-w-2xl rounded-3xl p-5 border bg-green-500/20 border-green-300/20'
+                            : 'max-w-2xl rounded-3xl p-5 border bg-blue-500/20 border-blue-300/20'
+                    );
+
+                    const header = createElement(
+                        'div',
+                        'flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2'
+                    );
+
+                    const userBox = createElement('div');
+
+                    const userName = createElement(
+                        'strong',
+                        'text-white',
+                        user.name || 'Usuário removido'
+                    );
+
+                    const badge = createElement(
+                        'span',
+                        isAdmin
+                            ? 'ml-2 text-xs px-3 py-1 rounded-full bg-green-400/20 text-green-100'
+                            : 'ml-2 text-xs px-3 py-1 rounded-full bg-blue-400/20 text-blue-100',
+                        isAdmin ? 'Equipe de suporte' : 'Solicitante'
+                    );
+
+                    const createdAt = createElement(
+                        'span',
+                        'text-xs text-slate-300 whitespace-nowrap',
+                        comment.created_at_formatted || ''
+                    );
+
+                    const text = createElement(
+                        'p',
+                        'text-white leading-7 whitespace-pre-line break-words',
+                        comment.comment || ''
+                    );
+
+                    userBox.appendChild(userName);
+                    userBox.appendChild(badge);
+
+                    header.appendChild(userBox);
+                    header.appendChild(createdAt);
+
+                    bubble.appendChild(header);
+                    bubble.appendChild(text);
+                    wrapper.appendChild(bubble);
+                    chatArea.appendChild(wrapper);
+                });
+            }
+
+            function userIsTyping() {
+                const activeElement = document.activeElement;
+
+                return activeElement && (
+                    activeElement.tagName === 'TEXTAREA' ||
+                    activeElement.tagName === 'INPUT' ||
+                    activeElement.tagName === 'SELECT'
+                );
+            }
+
+            function updateComments() {
+                if (userIsTyping() || !liveUrl || isUpdating) {
+                    return;
+                }
+
+                isUpdating = true;
+
+                fetch(liveUrl, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error('Erro ao buscar comentários.');
+                        }
+
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        const newCount = Number(data.count || 0);
+
+                        if (newCount !== currentCount) {
+                            if (newCount > currentCount) {
+                                playNotification();
+                            }
+
+                            currentCount = newCount;
+                            container.dataset.commentsCount = String(currentCount);
+
+                            renderComments(data.comments || []);
+                        }
+                    })
+                    .catch(function () {
+                        console.log('Erro ao atualizar comentários.');
+                    })
+                    .finally(function () {
+                        isUpdating = false;
+                    });
+            }
+
+            setInterval(updateComments, 5000);
+        });
     </script>
 
 </x-app-layout>

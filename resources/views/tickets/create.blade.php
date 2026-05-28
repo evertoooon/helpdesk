@@ -24,7 +24,11 @@
 
         @if($errors->any())
             <div class="bg-red-500/20 border border-red-300/30 text-red-100 p-4 rounded-2xl backdrop-blur-xl">
-                <ul>
+                <p class="font-bold mb-2">
+                    Verifique os campos abaixo:
+                </p>
+
+                <ul class="list-disc list-inside space-y-1">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -48,17 +52,17 @@
 
             </div>
 
-            <form method="POST"
-                  action="{{ route('tickets.store') }}"
-                  enctype="multipart/form-data"
-                  class="p-6">
+            <form
+                method="POST"
+                action="{{ route('tickets.store') }}"
+                enctype="multipart/form-data"
+                class="p-6">
 
                 @csrf
 
                 <div class="space-y-6">
 
                     <div>
-
                         <label class="block font-semibold text-blue-100 mb-2">
                             Categoria
                         </label>
@@ -73,30 +77,39 @@
                             </option>
 
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}" class="text-slate-900">
+                                <option
+                                    value="{{ $category->id }}"
+                                    class="text-slate-900"
+                                    {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
 
                         </select>
 
+                        @error('category_id')
+                            <p class="text-red-300 text-sm mt-2">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </div>
 
-                    <div id="helperBox"
-                         class="hidden bg-blue-500/10 border border-blue-300/20 rounded-2xl p-5">
+                    <div
+                        id="helperBox"
+                        class="hidden bg-blue-500/10 border border-blue-300/20 rounded-2xl p-5">
 
                         <h3 class="text-white text-xl font-bold mb-3">
                             Informações úteis
                         </h3>
 
-                        <p id="helperText"
-                           class="text-blue-100 leading-relaxed">
+                        <p
+                            id="helperText"
+                            class="text-blue-100 leading-relaxed">
                         </p>
 
                     </div>
 
                     <div>
-
                         <label class="block font-semibold text-blue-100 mb-2">
                             Título
                         </label>
@@ -105,13 +118,18 @@
                             type="text"
                             name="title"
                             value="{{ old('title') }}"
+                            maxlength="255"
                             placeholder="Ex: computador não liga"
                             class="w-full bg-white/10 border border-white/20 text-white rounded-2xl p-4 placeholder-blue-200 focus:border-blue-300 focus:ring-blue-300">
 
+                        @error('title')
+                            <p class="text-red-300 text-sm mt-2">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </div>
 
                     <div>
-
                         <label class="block font-semibold text-blue-100 mb-2">
                             Descrição
                         </label>
@@ -122,10 +140,14 @@
                             placeholder="Descreva detalhadamente o problema."
                             class="w-full bg-white/10 border border-white/20 text-white rounded-2xl p-4 placeholder-blue-200 focus:border-blue-300 focus:ring-blue-300">{{ old('description') }}</textarea>
 
+                        @error('description')
+                            <p class="text-red-300 text-sm mt-2">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </div>
 
                     <div>
-
                         <label class="block font-semibold text-blue-100 mb-2">
                             Foto ou print do problema
                         </label>
@@ -134,7 +156,7 @@
                             type="file"
                             id="attachmentInput"
                             name="attachment"
-                            accept="image/*"
+                            accept="image/jpeg,image/jpg,image/png,image/webp"
                             class="w-full bg-white/10 border border-white/20 text-blue-100 rounded-2xl p-4
                             file:mr-4
                             file:py-2
@@ -147,11 +169,14 @@
 
                         <p class="text-sm text-blue-200 mt-2">
                             Opcional. Envie uma imagem, print ou foto do erro para ajudar a equipe de suporte.
-                            Formatos aceitos: JPG, JPEG, PNG ou WEBP.
+                            Formatos aceitos: JPG, JPEG, PNG ou WEBP. Tamanho máximo: 2 MB.
                         </p>
 
-                        <div id="previewBox"
-                             class="hidden mt-5 bg-white/10 border border-white/20 rounded-2xl p-4">
+                        <p id="attachmentError" class="hidden text-red-300 text-sm mt-2"></p>
+
+                        <div
+                            id="previewBox"
+                            class="hidden mt-5 bg-white/10 border border-white/20 rounded-2xl p-4">
 
                             <p class="text-blue-100 font-semibold mb-3">
                                 Pré-visualização da imagem:
@@ -174,7 +199,6 @@
                                 {{ $message }}
                             </p>
                         @enderror
-
                     </div>
 
                     <div class="bg-yellow-500/10 border border-yellow-300/20 rounded-2xl p-5">
@@ -197,8 +221,9 @@
                             Abrir Chamado
                         </button>
 
-                        <a href="{{ route('tickets.index') }}"
-                           class="action-btn bg-white/10 hover:bg-white/20 text-white px-7 py-4 rounded-2xl font-bold border border-white/10 transition">
+                        <a
+                            href="{{ route('tickets.index') }}"
+                            class="action-btn bg-white/10 hover:bg-white/20 text-white px-7 py-4 rounded-2xl font-bold border border-white/10 transition">
                             Voltar
                         </a>
 
@@ -220,8 +245,17 @@
             const buttons = document.querySelectorAll('.action-btn');
 
             const attachmentInput = document.getElementById('attachmentInput');
+            const attachmentError = document.getElementById('attachmentError');
             const previewBox = document.getElementById('previewBox');
             const previewImage = document.getElementById('previewImage');
+
+            const maxFileSize = 2 * 1024 * 1024;
+
+            const allowedTypes = [
+                'image/jpeg',
+                'image/png',
+                'image/webp'
+            ];
 
             const tips = {
                 "Acesso": "Problemas comuns: senha incorreta, bloqueio de acesso ou usuário sem permissão.",
@@ -236,8 +270,40 @@
                 "Software": "Problemas comuns: erros, travamentos, atualização ou instalação de programas."
             };
 
-            category.addEventListener('change', function () {
-                const selectedName = category.options[category.selectedIndex].text.trim();
+            function showAttachmentError(message) {
+                if (!attachmentError) {
+                    return;
+                }
+
+                attachmentError.innerText = message;
+                attachmentError.classList.remove('hidden');
+            }
+
+            function clearAttachmentError() {
+                if (!attachmentError) {
+                    return;
+                }
+
+                attachmentError.innerText = '';
+                attachmentError.classList.add('hidden');
+            }
+
+            function clearPreview() {
+                if (previewImage) {
+                    previewImage.src = '';
+                }
+
+                if (previewBox) {
+                    previewBox.classList.add('hidden');
+                }
+            }
+
+            function updateHelper() {
+                if (!category || !helper || !helperText) {
+                    return;
+                }
+
+                const selectedName = category.options[category.selectedIndex]?.text.trim();
 
                 if (tips[selectedName]) {
                     helper.classList.remove('hidden');
@@ -246,25 +312,48 @@
                     helper.classList.add('hidden');
                     helperText.innerText = '';
                 }
-            });
+            }
 
-            attachmentInput.addEventListener('change', function () {
-                const file = attachmentInput.files[0];
+            if (category) {
+                category.addEventListener('change', updateHelper);
+                updateHelper();
+            }
 
-                if (file) {
+            if (attachmentInput) {
+                attachmentInput.addEventListener('change', function () {
+                    const file = attachmentInput.files[0];
+
+                    clearAttachmentError();
+                    clearPreview();
+
+                    if (!file) {
+                        return;
+                    }
+
+                    if (!allowedTypes.includes(file.type)) {
+                        attachmentInput.value = '';
+                        showAttachmentError('Formato inválido. Envie apenas imagens JPG, PNG ou WEBP.');
+                        return;
+                    }
+
+                    if (file.size > maxFileSize) {
+                        attachmentInput.value = '';
+                        showAttachmentError('Imagem muito grande. O tamanho máximo permitido é 2 MB.');
+                        return;
+                    }
+
                     const reader = new FileReader();
 
                     reader.onload = function (event) {
-                        previewImage.src = event.target.result;
-                        previewBox.classList.remove('hidden');
+                        if (previewImage && previewBox) {
+                            previewImage.src = event.target.result;
+                            previewBox.classList.remove('hidden');
+                        }
                     };
 
                     reader.readAsDataURL(file);
-                } else {
-                    previewImage.src = '';
-                    previewBox.classList.add('hidden');
-                }
-            });
+                });
+            }
 
             buttons.forEach(function (button) {
                 button.addEventListener('mouseenter', function () {

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Category;
+use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
 {
@@ -13,70 +13,68 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-
             [
                 'name' => 'Hardware',
                 'description' => 'Problemas relacionados a computadores, peças e equipamentos físicos.',
-                'active' => true
+                'active' => true,
             ],
 
             [
                 'name' => 'Software',
                 'description' => 'Falhas, erros ou instalação de programas e aplicativos.',
-                'active' => true
+                'active' => true,
             ],
 
             [
                 'name' => 'Rede',
                 'description' => 'Problemas de conexão, internet, Wi-Fi e comunicação de rede.',
-                'active' => true
+                'active' => true,
             ],
 
             [
                 'name' => 'Impressora',
                 'description' => 'Erros de impressão, configuração e manutenção de impressoras.',
-                'active' => true
+                'active' => true,
             ],
 
             [
                 'name' => 'Sistema',
                 'description' => 'Problemas internos do sistema HelpDesk ou sistemas corporativos.',
-                'active' => true
+                'active' => true,
             ],
 
             [
                 'name' => 'E-mail',
                 'description' => 'Problemas relacionados ao envio, recebimento ou acesso ao e-mail.',
-                'active' => true
+                'active' => true,
             ],
 
             [
                 'name' => 'Acesso',
                 'description' => 'Solicitações de login, permissões e recuperação de acesso.',
-                'active' => true
+                'active' => true,
             ],
 
             [
                 'name' => 'Segurança',
                 'description' => 'Incidentes de segurança, vírus, malware e vulnerabilidades.',
-                'active' => true
+                'active' => true,
             ],
 
             [
                 'name' => 'Outros',
                 'description' => 'Categoria para problemas que não se encaixam nas demais.',
-                'active' => true
-            ]
-
+                'active' => true,
+            ],
         ];
 
-        foreach ($categories as $category) {
-
+        foreach ($categories as $categoryData) {
             Category::updateOrCreate(
-                ['name' => $category['name']],
-                $category
+                [
+                    'name' => $categoryData['name'],
+                ],
+                $categoryData
             );
-
         }
     }
 }

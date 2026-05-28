@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
+use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -14,48 +15,40 @@ class ApiTicketCreationTest extends TestCase
 
     public function test_authenticated_user_can_create_ticket_via_api(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'role' => User::ROLE_USER,
+        ]);
 
         Sanctum::actingAs($user);
 
         $category = Category::create([
             'name' => 'Software',
-            'active' => true
+            'active' => true,
         ]);
 
         $response = $this
             ->withHeaders([
-                'Accept' => 'application/json'
+                'Accept' => 'application/json',
             ])
             ->postJson('/api/tickets', [
-
                 'category_id' => $category->id,
-
                 'title' => 'Erro no sistema',
-
-                'description' => 'O sistema está travando ao salvar.'
-
+                'description' => 'O sistema está travando ao salvar.',
             ]);
 
         $response
-            ->assertStatus(201)
+            ->assertCreated()
             ->assertJson([
                 'success' => true,
-                'message' => 'Chamado criado com sucesso.'
+                'message' => 'Chamado criado com sucesso.',
             ]);
 
         $this->assertDatabaseHas('tickets', [
-
             'title' => 'Erro no sistema',
-
             'description' => 'O sistema está travando ao salvar.',
-
-            'status' => 'Aberto',
-
-            'priority' => 'Média',
-
-            'user_id' => $user->id
-
+            'status' => Ticket::STATUS_ABERTO,
+            'priority' => Ticket::PRIORITY_MEDIA,
+            'user_id' => $user->id,
         ]);
     }
 }

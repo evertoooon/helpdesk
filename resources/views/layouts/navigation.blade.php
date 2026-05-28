@@ -91,11 +91,10 @@
                     </a>
 
                     @auth
+                        <div class="hidden lg:flex gap-4">
 
-                    <div class="hidden lg:flex gap-4">
-
-                        <a href="{{ route('dashboard') }}"
-                            class="
+                            <a href="{{ route('dashboard') }}"
+                               class="
                                     px-8
                                     py-4
                                     rounded-2xl
@@ -108,12 +107,12 @@
                                     duration-300
                                     shadow-[0_0_15px_rgba(60,120,255,.15)]
                                ">
-                            📊 Dashboard
-                        </a>
+                                📊 Dashboard
+                            </a>
 
-                        @if(Auth::user()->role === 'admin')
-                        <a href="{{ route('categories.index') }}"
-                            class="
+                            @if(auth()->user()->isAdmin())
+                                <a href="{{ route('categories.index') }}"
+                                   class="
                                         px-8
                                         py-4
                                         rounded-2xl
@@ -122,12 +121,12 @@
                                         hover:bg-white/10
                                         transition
                                    ">
-                            📁 Categorias
-                        </a>
-                        @endif
+                                    📁 Categorias
+                                </a>
+                            @endif
 
-                        <a href="{{ route('tickets.index') }}"
-                            class="
+                            <a href="{{ route('tickets.index') }}"
+                               class="
                                     px-8
                                     py-4
                                     rounded-2xl
@@ -136,24 +135,23 @@
                                     hover:bg-white/10
                                     transition
                                ">
-                            📋 Chamados
-                        </a>
+                                📋 Chamados
+                            </a>
 
-                    </div>
-
+                        </div>
                     @endauth
 
                 </div>
 
                 @auth
 
-                <div>
+                    <div class="hidden lg:block">
 
-                    <x-dropdown align="right" width="48">
+                        <x-dropdown align="right" width="48">
 
-                        <x-slot name="trigger">
+                            <x-slot name="trigger">
 
-                            <button class="
+                                <button class="
                                     px-6
                                     py-4
                                     rounded-2xl
@@ -164,38 +162,68 @@
                                     hover:bg-white/20
                                     transition
                                 ">
-                                👤 {{ Auth::user()->name }}
-                            </button>
-
-                        </x-slot>
-
-                        <x-slot name="content">
-
-                            <x-dropdown-link :href="route('profile.edit')">
-                                Perfil
-                            </x-dropdown-link>
-
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-
-                                <button type="submit"
-                                    class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                    Sair
+                                    👤 {{ auth()->user()->name }}
                                 </button>
-                            </form>
 
-                        </x-slot>
+                            </x-slot>
 
-                    </x-dropdown>
+                            <x-slot name="content">
 
-                </div>
+                                <x-dropdown-link :href="route('profile.edit')">
+                                    Perfil
+                                </x-dropdown-link>
+
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+
+                                    <button
+                                        type="submit"
+                                        class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        Sair
+                                    </button>
+                                </form>
+
+                            </x-slot>
+
+                        </x-dropdown>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="lg:hidden inline-flex items-center justify-center p-3 rounded-2xl bg-white/10 border border-white/10 text-white hover:bg-white/20 transition"
+                        @click="open = !open"
+                        aria-label="Abrir menu">
+
+                        <svg
+                            x-show="!open"
+                            class="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+
+                        <svg
+                            x-show="open"
+                            x-cloak
+                            class="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+
+                    </button>
 
                 @else
 
-                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3">
 
-                    <a href="{{ route('login') }}"
-                        class="
+                        <a href="{{ route('login') }}"
+                           class="
                                 px-6
                                 py-3
                                 rounded-2xl
@@ -205,14 +233,56 @@
                                 hover:bg-white/20
                                 transition
                            ">
-                        Entrar
-                    </a>
+                            Entrar
+                        </a>
 
-                </div>
+                    </div>
 
                 @endauth
 
             </div>
+
+            @auth
+                <div
+                    x-show="open"
+                    x-cloak
+                    x-transition
+                    class="lg:hidden mt-6 pt-6 border-t border-white/10 space-y-3">
+
+                    <a href="{{ route('dashboard') }}"
+                       class="block px-5 py-4 rounded-2xl bg-white/10 border border-white/10 text-white hover:bg-white/15 transition">
+                        📊 Dashboard
+                    </a>
+
+                    @if(auth()->user()->isAdmin())
+                        <a href="{{ route('categories.index') }}"
+                           class="block px-5 py-4 rounded-2xl text-blue-100 hover:text-white hover:bg-white/10 transition">
+                            📁 Categorias
+                        </a>
+                    @endif
+
+                    <a href="{{ route('tickets.index') }}"
+                       class="block px-5 py-4 rounded-2xl text-blue-100 hover:text-white hover:bg-white/10 transition">
+                        📋 Chamados
+                    </a>
+
+                    <a href="{{ route('profile.edit') }}"
+                       class="block px-5 py-4 rounded-2xl text-blue-100 hover:text-white hover:bg-white/10 transition">
+                        👤 Perfil
+                    </a>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="w-full text-left px-5 py-4 rounded-2xl text-red-100 hover:text-white hover:bg-red-500/20 transition">
+                            Sair
+                        </button>
+                    </form>
+
+                </div>
+            @endauth
 
         </div>
 

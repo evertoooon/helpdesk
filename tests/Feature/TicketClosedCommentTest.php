@@ -14,35 +14,28 @@ class TicketClosedCommentTest extends TestCase
 
     public function test_closed_ticket_cannot_receive_new_comments(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'role' => User::ROLE_USER,
+        ]);
 
         $category = Category::create([
             'name' => 'Suporte',
-            'active' => true
+            'active' => true,
         ]);
 
         $ticket = Ticket::create([
-
             'user_id' => $user->id,
-
             'category_id' => $category->id,
-
             'title' => 'Erro crítico',
-
             'description' => 'Sistema não responde.',
-
-            'status' => 'Resolvido',
-
-            'priority' => 'Alta'
-
+            'status' => Ticket::STATUS_RESOLVIDO,
+            'priority' => Ticket::PRIORITY_ALTA,
         ]);
 
         $response = $this
             ->actingAs($user)
             ->post("/tickets/{$ticket->id}/comments", [
-
-                'comment' => 'Ainda estou com problema.'
-
+                'comment' => 'Ainda estou com problema.',
             ]);
 
         $response->assertRedirect();
@@ -50,9 +43,7 @@ class TicketClosedCommentTest extends TestCase
         $response->assertSessionHas('error');
 
         $this->assertDatabaseMissing('ticket_comments', [
-
-            'comment' => 'Ainda estou com problema.'
-
+            'comment' => 'Ainda estou com problema.',
         ]);
     }
 }

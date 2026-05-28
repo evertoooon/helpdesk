@@ -4,33 +4,44 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="description" content="HelpDesk - Sistema web para abertura, acompanhamento e gerenciamento de chamados técnicos.">
 
         <title>{{ config('app.name', 'HelpDesk') }}</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
 
+        <style>
+            [x-cloak] {
+                display: none !important;
+            }
+        </style>
+
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
 
     <body class="font-sans antialiased text-slate-100 overflow-x-hidden">
 
-        <div class="fixed inset-0 -z-10 bg-slate-950">
-            <div id="blob-one"
-                 class="absolute top-[-120px] left-[-120px] w-96 h-96 bg-blue-600/40 rounded-full blur-3xl"></div>
+        <div class="fixed inset-0 -z-10 bg-slate-950" aria-hidden="true">
+            <div
+                id="blob-one"
+                class="absolute top-[-120px] left-[-120px] w-96 h-96 bg-blue-600/40 rounded-full blur-3xl">
+            </div>
 
-            <div id="blob-two"
-                 class="absolute bottom-[-120px] right-[-120px] w-96 h-96 bg-purple-600/40 rounded-full blur-3xl"></div>
+            <div
+                id="blob-two"
+                class="absolute bottom-[-120px] right-[-120px] w-96 h-96 bg-purple-600/40 rounded-full blur-3xl">
+            </div>
 
             <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950 to-purple-950"></div>
 
-            <div class="absolute inset-0 opacity-20"
-                 style="background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 0); background-size: 32px 32px;">
+            <div
+                class="absolute inset-0 opacity-20"
+                style="background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 0); background-size: 32px 32px;">
             </div>
         </div>
 
         <div class="min-h-screen">
-
             @include('layouts.navigation')
 
             @isset($header)
@@ -44,7 +55,6 @@
             <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 page-content">
                 {{ $slot }}
             </main>
-
         </div>
 
         <script>
@@ -65,15 +75,18 @@
                 }
 
                 document.addEventListener('mousemove', function (event) {
-                    const x = event.clientX / window.innerWidth;
-                    const y = event.clientY / window.innerHeight;
+                    const width = window.innerWidth || 1;
+                    const height = window.innerHeight || 1;
+
+                    const x = event.clientX / width;
+                    const y = event.clientY / height;
 
                     if (blobOne) {
-                        blobOne.style.transform = `translate(${x * 40}px, ${y * 40}px)`;
+                        blobOne.style.transform = 'translate(' + (x * 40) + 'px, ' + (y * 40) + 'px)';
                     }
 
                     if (blobTwo) {
-                        blobTwo.style.transform = `translate(${x * -40}px, ${y * -40}px)`;
+                        blobTwo.style.transform = 'translate(' + (x * -40) + 'px, ' + (y * -40) + 'px)';
                     }
                 });
             });

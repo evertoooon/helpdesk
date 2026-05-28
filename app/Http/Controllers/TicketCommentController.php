@@ -11,12 +11,17 @@ class TicketCommentController extends Controller
 {
     public function store(Request $request, Ticket $ticket)
     {
+        $user = Auth::user();
+
         if (
-            Auth::user()->role !== 'admin'
+            $user->role !== 'admin'
             &&
-            $ticket->user_id !== Auth::id()
+            $ticket->user_id !== $user->id
         ) {
-            abort(403, 'Você não possui permissão para comentar neste chamado.');
+            abort(
+                403,
+                'Você não possui permissão para comentar neste chamado.'
+            );
         }
 
         if (in_array($ticket->status, ['Resolvido', 'Cancelado'])) {
@@ -28,15 +33,16 @@ class TicketCommentController extends Controller
                 );
         }
 
-        $request->validate([
-            'comment' => 'required|string|max:2000'
+        $validated = $request->validate([
+            'comment' => 'required|string|max:2000',
         ]);
 
+ 
         TicketComment::create([
             'ticket_id' => $ticket->id,
-            'user_id' => Auth::id(),
-            'comment' => $request->comment,
-            'is_read' => false
+            'user_id' => $user->id,
+            'comment' => $validated['comment'],
+            'is_read' => false,
         ]);
 
         return redirect()

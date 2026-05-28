@@ -8,17 +8,21 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('tickets', function (Blueprint $table) {
-            $table->string('attachment')
-                ->nullable()
-                ->after('description');
-        });
+        if (!Schema::hasColumn('tickets', 'attachment')) {
+            Schema::table('tickets', function (Blueprint $table) {
+                $table->string('attachment')
+                    ->nullable()
+                    ->after('description');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('tickets', function (Blueprint $table) {
-            $table->dropColumn('attachment');
-        });
+        if (Schema::hasColumn('tickets', 'attachment')) {
+            Schema::table('tickets', function (Blueprint $table) {
+                $table->dropColumn('attachment');
+            });
+        }
     }
 };

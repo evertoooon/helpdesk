@@ -13,28 +13,27 @@ class ApiTicketValidationTest extends TestCase
 
     public function test_api_returns_422_when_required_fields_are_missing(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'role' => User::ROLE_USER,
+        ]);
 
         Sanctum::actingAs($user);
 
         $response = $this
             ->withHeaders([
-                'Accept' => 'application/json'
+                'Accept' => 'application/json',
             ])
             ->postJson('/api/tickets', [
-
                 'title' => '',
-
-                'description' => ''
-
+                'description' => '',
             ]);
 
         $response
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertJsonValidationErrors([
                 'category_id',
                 'title',
-                'description'
+                'description',
             ]);
     }
 }

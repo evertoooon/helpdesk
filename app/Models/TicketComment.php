@@ -7,20 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class TicketComment extends Model
 {
-protected $fillable = [
-    'ticket_id',
-    'user_id',
-    'comment',
-];
+    use HasFactory;
 
-public function ticket()
-{
-    return $this->belongsTo(Ticket::class);
-}
+    protected $fillable = [
+        'ticket_id',
+        'user_id',
+        'comment',
+        'is_read',
+    ];
 
-public function user()
-{
-    return $this->belongsTo(User::class);
-} 
-use HasFactory;
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class);
+    }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -13,10 +13,21 @@ class ApiAuthenticationTest extends TestCase
     {
         $response = $this
             ->withHeaders([
-                'Accept' => 'application/json'
+                'Accept' => 'application/json',
             ])
             ->getJson('/api/tickets');
 
-        $response->assertStatus(401);
+        $response->assertUnauthorized();
+    }
+
+    public function test_api_ticket_creation_requires_authentication(): void
+    {
+        $response = $this
+            ->withHeaders([
+                'Accept' => 'application/json',
+            ])
+            ->postJson('/api/tickets', []);
+
+        $response->assertUnauthorized();
     }
 }

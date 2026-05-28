@@ -6,25 +6,39 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::table('tickets', function (Blueprint $table) {
+        if (!Schema::hasColumn('tickets', 'assigned_to')) {
 
-            $table->foreignId('assigned_to')
-                ->nullable()
-                ->after('user_id')
-                ->constrained('users')
-                ->nullOnDelete();
+            Schema::table('tickets', function (Blueprint $table) {
 
-        });
+                $table->foreignId('assigned_to')
+                    ->nullable()
+                    ->after('user_id')
+                    ->constrained('users')
+                    ->nullOnDelete();
+
+            });
+
+        }
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::table('tickets', function (Blueprint $table) {
+        if (Schema::hasColumn('tickets', 'assigned_to')) {
 
-            $table->dropConstrainedForeignId('assigned_to');
+            Schema::table('tickets', function (Blueprint $table) {
 
-        });
+                $table->dropConstrainedForeignId('assigned_to');
+
+            });
+
+        }
     }
 };
