@@ -22,7 +22,7 @@
             </div>
 
             <a href="{{ route('tickets.create') }}"
-               class="action-btn inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-7 py-4 rounded-2xl font-bold shadow-[0_0_30px_rgba(37,99,235,0.45)] transition">
+                class="action-btn inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-7 py-4 rounded-2xl font-bold shadow-[0_0_30px_rgba(37,99,235,0.45)] transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m7-7H5" />
                 </svg>
@@ -31,15 +31,15 @@
         </div>
 
         @if(session('success'))
-            <div class="bg-green-500/20 border border-green-300/30 text-green-100 p-4 rounded-2xl backdrop-blur-xl">
-                {{ session('success') }}
-            </div>
+        <div class="bg-green-500/20 border border-green-300/30 text-green-100 p-4 rounded-2xl backdrop-blur-xl">
+            {{ session('success') }}
+        </div>
         @endif
 
         @if(session('error'))
-            <div class="bg-red-500/20 border border-red-300/30 text-red-100 p-4 rounded-2xl backdrop-blur-xl">
-                {{ session('error') }}
-            </div>
+        <div class="bg-red-500/20 border border-red-300/30 text-red-100 p-4 rounded-2xl backdrop-blur-xl">
+            {{ session('error') }}
+        </div>
         @endif
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -138,17 +138,17 @@
                             <option value="" class="text-black">Status</option>
 
                             @foreach([
-                                \App\Models\Ticket::STATUS_ABERTO,
-                                \App\Models\Ticket::STATUS_EM_ANDAMENTO,
-                                \App\Models\Ticket::STATUS_RESOLVIDO,
-                                \App\Models\Ticket::STATUS_CANCELADO,
+                            \App\Models\Ticket::STATUS_ABERTO,
+                            \App\Models\Ticket::STATUS_EM_ANDAMENTO,
+                            \App\Models\Ticket::STATUS_RESOLVIDO,
+                            \App\Models\Ticket::STATUS_CANCELADO,
                             ] as $status)
-                                <option
-                                    value="{{ $status }}"
-                                    class="text-black"
-                                    {{ request('status') === $status ? 'selected' : '' }}>
-                                    {{ $status }}
-                                </option>
+                            <option
+                                value="{{ $status }}"
+                                class="text-black"
+                                {{ request('status') === $status ? 'selected' : '' }}>
+                                {{ $status }}
+                            </option>
                             @endforeach
                         </select>
 
@@ -158,17 +158,17 @@
                             <option value="" class="text-black">Prioridade</option>
 
                             @foreach([
-                                \App\Models\Ticket::PRIORITY_BAIXA => '🟢 Baixa',
-                                \App\Models\Ticket::PRIORITY_MEDIA => '🟡 Média',
-                                \App\Models\Ticket::PRIORITY_ALTA => '🟠 Alta',
-                                \App\Models\Ticket::PRIORITY_URGENTE => '🔴 Urgente',
+                            \App\Models\Ticket::PRIORITY_BAIXA => '🟢 Baixa',
+                            \App\Models\Ticket::PRIORITY_MEDIA => '🟡 Média',
+                            \App\Models\Ticket::PRIORITY_ALTA => '🟠 Alta',
+                            \App\Models\Ticket::PRIORITY_URGENTE => '🔴 Urgente',
                             ] as $value => $label)
-                                <option
-                                    value="{{ $value }}"
-                                    class="text-black"
-                                    {{ request('priority') === $value ? 'selected' : '' }}>
-                                    {{ $label }}
-                                </option>
+                            <option
+                                value="{{ $value }}"
+                                class="text-black"
+                                {{ request('priority') === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
                             @endforeach
                         </select>
 
@@ -218,139 +218,170 @@
 
                     <tbody class="divide-y divide-white/10">
                         @forelse($tickets as $ticket)
-                            <tr class="hover:bg-white/10 transition duration-300">
+                        <tr class="hover:bg-white/10 transition duration-300">
 
-                                <td class="p-5">
-                                    <div class="flex items-center gap-3 flex-wrap">
-                                        <p class="font-bold text-white text-lg break-words">
-                                            #{{ $ticket->id }} - {{ $ticket->title }}
-                                        </p>
-
-                                        @if($ticket->unread_comments_count > 0)
-                                            <span class="inline-flex items-center gap-2 bg-red-500/25 text-red-100 border border-red-300/30 rounded-full px-3 py-1 text-xs font-bold shadow-[0_0_18px_rgba(239,68,68,.35)]">
-                                                🔴 {{ $ticket->unread_comments_count }}
-                                            </span>
-                                        @endif
-                                    </div>
-
-                                    <p class="text-blue-200 text-sm mt-1">
-                                        Criado em {{ $ticket->created_at->format('d/m/Y H:i') }}
+                            <td class="p-5">
+                                <div class="flex items-center gap-3 flex-wrap">
+                                    <p class="font-bold text-white text-lg break-words">
+                                        #{{ $ticket->id }} - {{ $ticket->title }}
                                     </p>
-                                </td>
 
-                                <td class="p-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-2xl bg-blue-500/20 border border-blue-300/30 text-blue-200 flex items-center justify-center shadow-lg">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
-                                            </svg>
-                                        </div>
+                                    @if($ticket->unread_comments_count > 0)
+                                    <span class="inline-flex items-center gap-2 bg-red-500/25 text-red-100 border border-red-300/30 rounded-full px-3 py-1 text-xs font-bold shadow-[0_0_18px_rgba(239,68,68,.35)]">
+                                        🔴 {{ $ticket->unread_comments_count }}
+                                    </span>
+                                    @endif
+                                </div>
 
-                                        <span class="font-semibold text-white whitespace-nowrap">
-                                            {{ $ticket->category->name ?? 'Sem categoria' }}
-                                        </span>
+                                <p class="text-blue-200 text-sm mt-1">
+                                    Criado em {{ $ticket->created_at->format('d/m/Y H:i') }}
+                                </p>
+                            </td>
+
+                            <td class="p-5">
+                                <div class="w-10 h-10 rounded-2xl bg-blue-500/20 border border-blue-300/30 text-blue-200 flex items-center justify-center shadow-lg text-xl">
+
+                                    @switch($ticket->category->name ?? '')
+
+                                    @case('Hardware')
+                                    🖥️
+                                    @break
+
+                                    @case('Software')
+                                    💻
+                                    @break
+
+                                    @case('Rede')
+                                    🌐
+                                    @break
+
+                                    @case('Segurança')
+                                    🔒
+                                    @break
+
+                                    @case('E-mail')
+                                    ✉️
+                                    @break
+
+                                    @case('Impressora')
+                                    🖨️
+                                    @break
+
+                                    @case('Acesso')
+                                    🔑
+                                    @break
+
+                                    @case('Sistema')
+                                    ⚙️
+                                    @break
+
+                                    @default
+                                    📂
+
+                                    @endswitch
+
+                                </div>
+                            </td>
+
+                            <td class="p-5">
+                                @if($ticket->priority === \App\Models\Ticket::PRIORITY_BAIXA)
+                                <span class="priority-pill inline-flex items-center gap-2 bg-green-500/20 text-green-200 border border-green-300/20 rounded-full px-4 py-2 text-sm font-bold">
+                                    🟢 Baixa
+                                </span>
+                                @elseif($ticket->priority === \App\Models\Ticket::PRIORITY_MEDIA)
+                                <span class="priority-pill inline-flex items-center gap-2 bg-yellow-500/20 text-yellow-200 border border-yellow-300/20 rounded-full px-4 py-2 text-sm font-bold">
+                                    🟡 Média
+                                </span>
+                                @elseif($ticket->priority === \App\Models\Ticket::PRIORITY_ALTA)
+                                <span class="priority-pill inline-flex items-center gap-2 bg-orange-500/20 text-orange-200 border border-orange-300/20 rounded-full px-4 py-2 text-sm font-bold">
+                                    🟠 Alta
+                                </span>
+                                @else
+                                <span class="urgent-pill inline-flex items-center gap-2 bg-red-500/20 text-red-200 border border-red-300/20 rounded-full px-4 py-2 text-sm font-bold">
+                                    🔴 Urgente
+                                </span>
+                                @endif
+                            </td>
+
+                            <td class="p-5">
+                                @if($ticket->status === \App\Models\Ticket::STATUS_ABERTO)
+                                <span class="status-pill inline-flex items-center gap-2 bg-yellow-500/20 text-yellow-200 border border-yellow-300/20 rounded-full px-4 py-2 text-sm font-bold">
+                                    Aberto
+                                </span>
+                                @elseif($ticket->status === \App\Models\Ticket::STATUS_EM_ANDAMENTO)
+                                <span class="status-pill inline-flex items-center gap-2 bg-blue-500/20 text-blue-200 border border-blue-300/20 rounded-full px-4 py-2 text-sm font-bold">
+                                    Em andamento
+                                </span>
+                                @elseif($ticket->status === \App\Models\Ticket::STATUS_RESOLVIDO)
+                                <span class="status-pill inline-flex items-center gap-2 bg-green-500/20 text-green-200 border border-green-300/20 rounded-full px-4 py-2 text-sm font-bold">
+                                    Resolvido
+                                </span>
+                                @else
+                                <span class="status-pill inline-flex items-center gap-2 bg-red-500/20 text-red-200 border border-red-300/20 rounded-full px-4 py-2 text-sm font-bold">
+                                    Cancelado
+                                </span>
+                                @endif
+                            </td>
+
+                            <td class="p-5 text-blue-100 whitespace-nowrap">
+                                {{ $ticket->user->name ?? 'Não informado' }}
+                            </td>
+
+                            <td class="p-5">
+                                @if($ticket->assignedUser)
+                                <div class="inline-flex items-center gap-3 bg-purple-500/20 text-purple-100 border border-purple-300/20 rounded-2xl px-4 py-2 font-semibold">
+                                    <div class="w-8 h-8 rounded-xl bg-purple-500/25 border border-purple-300/20 flex items-center justify-center text-white font-bold">
+                                        {{ strtoupper(substr($ticket->assignedUser->name, 0, 1)) }}
                                     </div>
-                                </td>
 
-                                <td class="p-5">
-                                    @if($ticket->priority === \App\Models\Ticket::PRIORITY_BAIXA)
-                                        <span class="priority-pill inline-flex items-center gap-2 bg-green-500/20 text-green-200 border border-green-300/20 rounded-full px-4 py-2 text-sm font-bold">
-                                            🟢 Baixa
-                                        </span>
-                                    @elseif($ticket->priority === \App\Models\Ticket::PRIORITY_MEDIA)
-                                        <span class="priority-pill inline-flex items-center gap-2 bg-yellow-500/20 text-yellow-200 border border-yellow-300/20 rounded-full px-4 py-2 text-sm font-bold">
-                                            🟡 Média
-                                        </span>
-                                    @elseif($ticket->priority === \App\Models\Ticket::PRIORITY_ALTA)
-                                        <span class="priority-pill inline-flex items-center gap-2 bg-orange-500/20 text-orange-200 border border-orange-300/20 rounded-full px-4 py-2 text-sm font-bold">
-                                            🟠 Alta
-                                        </span>
-                                    @else
-                                        <span class="urgent-pill inline-flex items-center gap-2 bg-red-500/20 text-red-200 border border-red-300/20 rounded-full px-4 py-2 text-sm font-bold">
-                                            🔴 Urgente
-                                        </span>
+                                    <span class="whitespace-nowrap">
+                                        {{ $ticket->assignedUser->name }}
+                                    </span>
+                                </div>
+                                @else
+                                <span class="inline-flex items-center gap-2 bg-white/10 text-blue-100 border border-white/10 rounded-full px-4 py-2 text-sm font-bold whitespace-nowrap">
+                                    Não atribuído
+                                </span>
+                                @endif
+                            </td>
+
+                            <td class="p-5">
+                                <div class="flex flex-nowrap items-center gap-3">
+                                    <a href="{{ route('tickets.show', $ticket) }}"
+                                        class="action-btn inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white rounded-xl px-4 py-2 transition border border-white/10 whitespace-nowrap">
+                                        Ver
+                                    </a>
+
+                                    @if(auth()->user()->isAdmin())
+                                    <a href="{{ route('tickets.attend', $ticket) }}"
+                                        class="action-btn inline-flex items-center gap-2 bg-green-500/25 hover:bg-green-500/40 text-green-100 rounded-xl px-4 py-2 transition border border-green-300/20 whitespace-nowrap">
+                                        Atender
+                                    </a>
+
+                                    <form
+                                        action="{{ route('tickets.destroy', $ticket) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Tem certeza que deseja excluir este chamado?')">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button
+                                            type="submit"
+                                            class="action-btn inline-flex items-center gap-2 bg-red-500/25 hover:bg-red-500/40 text-red-100 rounded-xl px-4 py-2 transition border border-red-300/20 whitespace-nowrap">
+                                            Excluir
+                                        </button>
+                                    </form>
                                     @endif
-                                </td>
+                                </div>
+                            </td>
 
-                                <td class="p-5">
-                                    @if($ticket->status === \App\Models\Ticket::STATUS_ABERTO)
-                                        <span class="status-pill inline-flex items-center gap-2 bg-yellow-500/20 text-yellow-200 border border-yellow-300/20 rounded-full px-4 py-2 text-sm font-bold">
-                                            Aberto
-                                        </span>
-                                    @elseif($ticket->status === \App\Models\Ticket::STATUS_EM_ANDAMENTO)
-                                        <span class="status-pill inline-flex items-center gap-2 bg-blue-500/20 text-blue-200 border border-blue-300/20 rounded-full px-4 py-2 text-sm font-bold">
-                                            Em andamento
-                                        </span>
-                                    @elseif($ticket->status === \App\Models\Ticket::STATUS_RESOLVIDO)
-                                        <span class="status-pill inline-flex items-center gap-2 bg-green-500/20 text-green-200 border border-green-300/20 rounded-full px-4 py-2 text-sm font-bold">
-                                            Resolvido
-                                        </span>
-                                    @else
-                                        <span class="status-pill inline-flex items-center gap-2 bg-red-500/20 text-red-200 border border-red-300/20 rounded-full px-4 py-2 text-sm font-bold">
-                                            Cancelado
-                                        </span>
-                                    @endif
-                                </td>
-
-                                <td class="p-5 text-blue-100 whitespace-nowrap">
-                                    {{ $ticket->user->name ?? 'Não informado' }}
-                                </td>
-
-                                <td class="p-5">
-                                    @if($ticket->assignedUser)
-                                        <div class="inline-flex items-center gap-3 bg-purple-500/20 text-purple-100 border border-purple-300/20 rounded-2xl px-4 py-2 font-semibold">
-                                            <div class="w-8 h-8 rounded-xl bg-purple-500/25 border border-purple-300/20 flex items-center justify-center text-white font-bold">
-                                                {{ strtoupper(substr($ticket->assignedUser->name, 0, 1)) }}
-                                            </div>
-
-                                            <span class="whitespace-nowrap">
-                                                {{ $ticket->assignedUser->name }}
-                                            </span>
-                                        </div>
-                                    @else
-                                        <span class="inline-flex items-center gap-2 bg-white/10 text-blue-100 border border-white/10 rounded-full px-4 py-2 text-sm font-bold whitespace-nowrap">
-                                            Não atribuído
-                                        </span>
-                                    @endif
-                                </td>
-
-                                <td class="p-5">
-                                    <div class="flex flex-nowrap items-center gap-3">
-                                        <a href="{{ route('tickets.show', $ticket) }}"
-                                           class="action-btn inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white rounded-xl px-4 py-2 transition border border-white/10 whitespace-nowrap">
-                                            Ver
-                                        </a>
-
-                                        @if(auth()->user()->isAdmin())
-                                            <a href="{{ route('tickets.attend', $ticket) }}"
-                                               class="action-btn inline-flex items-center gap-2 bg-green-500/25 hover:bg-green-500/40 text-green-100 rounded-xl px-4 py-2 transition border border-green-300/20 whitespace-nowrap">
-                                                Atender
-                                            </a>
-
-                                            <form
-                                                action="{{ route('tickets.destroy', $ticket) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Tem certeza que deseja excluir este chamado?')">
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <button
-                                                    type="submit"
-                                                    class="action-btn inline-flex items-center gap-2 bg-red-500/25 hover:bg-red-500/40 text-red-100 rounded-xl px-4 py-2 transition border border-red-300/20 whitespace-nowrap">
-                                                    Excluir
-                                                </button>
-                                            </form>
-                                        @endif
-                                    </div>
-                                </td>
-
-                            </tr>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="7" class="p-8 text-center text-blue-100">
-                                    Nenhum chamado encontrado.
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="7" class="p-8 text-center text-blue-100">
+                                Nenhum chamado encontrado.
+                            </td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -367,15 +398,15 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const cards = document.querySelectorAll('.glass-card');
             const buttons = document.querySelectorAll('.action-btn');
             const statusItems = document.querySelectorAll('.status-pill');
             const priorityItems = document.querySelectorAll('.priority-pill');
             const urgentItems = document.querySelectorAll('.urgent-pill');
 
-            cards.forEach(function (card) {
-                card.addEventListener('mousemove', function (event) {
+            cards.forEach(function(card) {
+                card.addEventListener('mousemove', function(event) {
                     const rect = card.getBoundingClientRect();
                     const x = event.clientX - rect.left;
                     const y = event.clientY - rect.top;
@@ -383,59 +414,74 @@
                     card.style.background = 'radial-gradient(circle at ' + x + 'px ' + y + 'px, rgba(255,255,255,0.18), transparent 35%), linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))';
                 });
 
-                card.addEventListener('mouseleave', function () {
+                card.addEventListener('mouseleave', function() {
                     card.style.background = '';
                 });
             });
 
-            buttons.forEach(function (button) {
-                button.addEventListener('mouseenter', function () {
+            buttons.forEach(function(button) {
+                button.addEventListener('mouseenter', function() {
                     button.style.transform = 'scale(1.04)';
                     button.style.boxShadow = '0 0 25px rgba(255,255,255,.15)';
                 });
 
-                button.addEventListener('mouseleave', function () {
+                button.addEventListener('mouseleave', function() {
                     button.style.transform = 'scale(1)';
                     button.style.boxShadow = '';
                 });
             });
 
-            statusItems.forEach(function (item) {
+            statusItems.forEach(function(item) {
                 item.animate(
-                    [
-                        { opacity: 1 },
-                        { opacity: 0.75 },
-                        { opacity: 1 }
-                    ],
-                    {
+                    [{
+                            opacity: 1
+                        },
+                        {
+                            opacity: 0.75
+                        },
+                        {
+                            opacity: 1
+                        }
+                    ], {
                         duration: 1800,
                         iterations: Infinity
                     }
                 );
             });
 
-            priorityItems.forEach(function (item) {
+            priorityItems.forEach(function(item) {
                 item.animate(
-                    [
-                        { transform: 'scale(1)' },
-                        { transform: 'scale(1.03)' },
-                        { transform: 'scale(1)' }
-                    ],
-                    {
+                    [{
+                            transform: 'scale(1)'
+                        },
+                        {
+                            transform: 'scale(1.03)'
+                        },
+                        {
+                            transform: 'scale(1)'
+                        }
+                    ], {
                         duration: 2200,
                         iterations: Infinity
                     }
                 );
             });
 
-            urgentItems.forEach(function (item) {
+            urgentItems.forEach(function(item) {
                 item.animate(
-                    [
-                        { transform: 'scale(1)', opacity: 1 },
-                        { transform: 'scale(1.08)', opacity: 0.75 },
-                        { transform: 'scale(1)', opacity: 1 }
-                    ],
-                    {
+                    [{
+                            transform: 'scale(1)',
+                            opacity: 1
+                        },
+                        {
+                            transform: 'scale(1.08)',
+                            opacity: 0.75
+                        },
+                        {
+                            transform: 'scale(1)',
+                            opacity: 1
+                        }
+                    ], {
                         duration: 1200,
                         iterations: Infinity
                     }

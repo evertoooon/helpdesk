@@ -9,18 +9,18 @@
                 <div class="w-16 h-16 rounded-3xl bg-purple-500/20 border border-purple-300/30 shadow-[0_0_30px_rgba(168,85,247,0.40)] flex items-center justify-center">
 
                     <svg class="w-8 h-8 text-purple-300"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2.5"
-                         viewBox="0 0 24 24">
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        viewBox="0 0 24 24">
 
                         <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            stroke-linejoin="round"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
 
                         <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/>
+                            stroke-linejoin="round"
+                            d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" />
 
                     </svg>
 
@@ -41,7 +41,7 @@
             </div>
 
             <a href="{{ route('categories.index') }}"
-               class="action-btn bg-white/10 hover:bg-white/20 text-white px-7 py-4 rounded-2xl font-bold border border-white/10 transition">
+                class="action-btn bg-white/10 hover:bg-white/20 text-white px-7 py-4 rounded-2xl font-bold border border-white/10 transition">
 
                 Voltar
 
@@ -57,17 +57,44 @@
 
                     <div class="w-16 h-16 rounded-3xl bg-blue-500/20 border border-blue-300/30 text-blue-200 flex items-center justify-center shadow-[0_0_25px_rgba(59,130,246,0.35)]">
 
-                        <svg class="w-8 h-8"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2"
-                             viewBox="0 0 24 24">
+                        @switch($category->name)
 
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
+                        @case('Hardware')
+                        🖥️
+                        @break
 
-                        </svg>
+                        @case('Software')
+                        💻
+                        @break
+
+                        @case('Rede')
+                        🌐
+                        @break
+
+                        @case('Segurança')
+                        🔒
+                        @break
+
+                        @case('E-mail')
+                        ✉️
+                        @break
+
+                        @case('Impressora')
+                        🖨️
+                        @break
+
+                        @case('Acesso')
+                        🔑
+                        @break
+
+                        @case('Sistema')
+                        ⚙️
+                        @break
+
+                        @default
+                        📂
+
+                        @endswitch
 
                     </div>
 
@@ -87,23 +114,23 @@
 
                 @if($category->active)
 
-                    <span class="status-pill inline-flex items-center gap-2 bg-green-500/20 text-green-200 border border-green-300/20 rounded-full px-5 py-2 text-sm font-bold">
+                <span class="status-pill inline-flex items-center gap-2 bg-green-500/20 text-green-200 border border-green-300/20 rounded-full px-5 py-2 text-sm font-bold">
 
-                        <span class="w-2 h-2 rounded-full bg-green-300"></span>
+                    <span class="w-2 h-2 rounded-full bg-green-300"></span>
 
-                        Ativa
+                    Ativa
 
-                    </span>
+                </span>
 
                 @else
 
-                    <span class="status-pill inline-flex items-center gap-2 bg-red-500/20 text-red-200 border border-red-300/20 rounded-full px-5 py-2 text-sm font-bold">
+                <span class="status-pill inline-flex items-center gap-2 bg-red-500/20 text-red-200 border border-red-300/20 rounded-full px-5 py-2 text-sm font-bold">
 
-                        <span class="w-2 h-2 rounded-full bg-red-300"></span>
+                    <span class="w-2 h-2 rounded-full bg-red-300"></span>
 
-                        Inativa
+                    Inativa
 
-                    </span>
+                </span>
 
                 @endif
 
@@ -160,14 +187,14 @@
         <div class="flex flex-wrap gap-3">
 
             <a href="{{ route('categories.edit', $category) }}"
-               class="action-btn bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-7 py-4 rounded-2xl font-bold shadow-[0_0_30px_rgba(59,130,246,0.35)] transition">
+                class="action-btn bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-7 py-4 rounded-2xl font-bold shadow-[0_0_30px_rgba(59,130,246,0.35)] transition">
 
                 Editar Categoria
 
             </a>
 
             <a href="{{ route('categories.index') }}"
-               class="action-btn bg-white/10 hover:bg-white/20 text-white px-7 py-4 rounded-2xl font-bold border border-white/10 transition">
+                class="action-btn bg-white/10 hover:bg-white/20 text-white px-7 py-4 rounded-2xl font-bold border border-white/10 transition">
 
                 Voltar para lista
 
@@ -178,15 +205,15 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
 
             const cards = document.querySelectorAll('.glass-card');
             const buttons = document.querySelectorAll('.action-btn');
             const statusItems = document.querySelectorAll('.status-pill');
 
-            cards.forEach(function (card) {
+            cards.forEach(function(card) {
 
-                card.addEventListener('mousemove', function (event) {
+                card.addEventListener('mousemove', function(event) {
 
                     const rect = card.getBoundingClientRect();
                     const x = event.clientX - rect.left;
@@ -200,35 +227,39 @@
 
                 });
 
-                card.addEventListener('mouseleave', function () {
+                card.addEventListener('mouseleave', function() {
                     card.style.background = '';
                 });
 
             });
 
-            buttons.forEach(function (button) {
+            buttons.forEach(function(button) {
 
-                button.addEventListener('mouseenter', function () {
+                button.addEventListener('mouseenter', function() {
                     button.style.transform = 'scale(1.03)';
                     button.style.boxShadow = '0 0 25px rgba(255,255,255,.15)';
                 });
 
-                button.addEventListener('mouseleave', function () {
+                button.addEventListener('mouseleave', function() {
                     button.style.transform = 'scale(1)';
                     button.style.boxShadow = '';
                 });
 
             });
 
-            statusItems.forEach(function (item) {
+            statusItems.forEach(function(item) {
 
                 item.animate(
-                    [
-                        { opacity: 1 },
-                        { opacity: 0.75 },
-                        { opacity: 1 }
-                    ],
-                    {
+                    [{
+                            opacity: 1
+                        },
+                        {
+                            opacity: 0.75
+                        },
+                        {
+                            opacity: 1
+                        }
+                    ], {
                         duration: 1800,
                         iterations: Infinity
                     }
