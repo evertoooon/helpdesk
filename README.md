@@ -1,5 +1,11 @@
 # 💜 HelpDesk
 
+![Laravel](https://img.shields.io/badge/Laravel-10-red)
+![PHP](https://img.shields.io/badge/PHP-8.1-blue)
+![Tests](https://img.shields.io/badge/Tests-54%20Passed-success)
+![Assertions](https://img.shields.io/badge/Assertions-126-success)
+![License](https://img.shields.io/badge/license-Academic-purple)
+
 Sistema web moderno para abertura, gerenciamento e acompanhamento de chamados técnicos desenvolvido com Laravel 💻✨
 
 O projeto foi criado para a disciplina **ADS160 – Tópicos Especiais em Desenvolvimento de Software** e evoluído ao longo do semestre com foco em:
@@ -53,7 +59,7 @@ O **HelpDesk Neon** permite que usuários registrem problemas, solicitações e 
 
 Cada chamado possui um sistema de conversa integrado entre usuário e suporte 💬
 
-### Recursos do chat:
+### Recursos do chat
 
 * atualização automática;
 * mensagens em tempo real;
@@ -82,17 +88,17 @@ Administradores possuem acesso completo ao sistema:
 
 # 📂 Categorias
 
-O sistema já possui categorias padrão cadastradas:
+O sistema possui categorias padrão cadastradas:
 
-* Hardware
-* Software
-* Rede
-* Impressora
-* Sistema
-* E-mail
-* Acesso
-* Segurança
-* Outros
+* 🖥️ Hardware
+* 💻 Software
+* 🌐 Rede
+* 🖨️ Impressora
+* ⚙️ Sistema
+* ✉️ E-mail
+* 🔑 Acesso
+* 🔒 Segurança
+* 📂 Outros
 
 ---
 
@@ -100,7 +106,9 @@ O sistema já possui categorias padrão cadastradas:
 
 O sistema possui API REST autenticada utilizando Laravel Sanctum 🔐
 
-## Autenticação
+---
+
+## 🔐 Autenticação
 
 ```http
 POST /api/login
@@ -110,9 +118,9 @@ Retorna um token de autenticação.
 
 ---
 
-## Endpoints disponíveis
+## 🎫 Endpoints disponíveis
 
-### 🎫 Chamados
+### Chamados
 
 ```http
 GET /api/tickets
@@ -122,7 +130,7 @@ PUT /api/tickets/{id}
 DELETE /api/tickets/{id}
 ```
 
-### 💬 Comentários
+### Comentários
 
 ```http
 POST /api/tickets/{id}/comments
@@ -132,22 +140,55 @@ POST /api/tickets/{id}/comments
 
 # 🧪 Testes Automatizados
 
-O projeto possui testes automatizados utilizando PHPUnit ✅
+O projeto possui testes automatizados utilizando PHPUnit e Laravel Dusk ✅
 
-### Cobertura atual:
+---
 
-* testes de autenticação;
-* testes de permissões;
-* testes de API;
-* testes de validação;
-* testes de regras de negócio;
+## 📌 Cobertura Atual
+
+* testes unitários;
 * testes de integração;
-* testes do sistema de chamados.
+* testes de API REST;
+* testes de permissões;
+* testes de autenticação;
+* testes de upload;
+* testes de regras de negócio;
+* testes Browser/E2E;
+* testes de interface automatizados.
 
-### Executar testes
+---
+
+## 🌐 Testes de Interface (Laravel Dusk)
+
+O sistema também possui testes automatizados de navegador utilizando Laravel Dusk + ChromeDriver.
+
+Os testes Browser simulam ações reais do usuário dentro do sistema.
+
+### Funcionalidades testadas via navegador
+
+* login automatizado;
+* criação de chamados;
+* criação de categorias;
+* autenticação;
+* validação de permissões;
+* navegação entre telas;
+* sessões autenticadas;
+* proteção de rotas administrativas.
+
+---
+
+## ▶️ Executar Testes PHPUnit
 
 ```bash
 php artisan test
+```
+
+---
+
+## ▶️ Executar Testes Browser/E2E
+
+```bash
+php artisan dusk
 ```
 
 ---
@@ -161,25 +202,45 @@ php artisan test
 * MySQL
 * Laravel Sanctum
 * PHPUnit
+* Laravel Dusk
 
 ---
 
 ## Frontend
 
+* Blade
 * Tailwind CSS
 * Vite
-* Blade
 * JavaScript
 
 ---
 
 ## Ferramentas
 
+* ChromeDriver
 * Mailtrap
 * Git
 * GitHub
 * Composer
 * NPM
+
+---
+
+# 🏗️ Arquitetura do Projeto
+
+O sistema foi desenvolvido utilizando arquitetura MVC (Model-View-Controller) fornecida pelo Laravel.
+
+## Organização principal
+
+* Models → regras de negócio e entidades
+* Controllers → fluxo da aplicação
+* Views (Blade) → interface do usuário
+* Routes → gerenciamento das rotas
+* Middleware → controle de permissões
+* API → endpoints REST autenticados
+* Tests → testes automatizados unitários, integração e browser
+
+O projeto segue boas práticas de separação de responsabilidades e organização modular.
 
 ---
 
@@ -230,7 +291,7 @@ php artisan key:generate
 
 ## 6️⃣ Configurar banco de dados
 
-Edite o `.env`:
+Edite o arquivo `.env`:
 
 ```env
 DB_DATABASE=helpdesk
@@ -248,7 +309,7 @@ php artisan migrate
 
 ---
 
-## 8️⃣ Popular banco com categorias iniciais
+## 8️⃣ Popular banco de dados
 
 ```bash
 php artisan db:seed
@@ -280,9 +341,27 @@ npm run dev
 
 ---
 
+# 🌐 Executar Testes Browser (Laravel Dusk)
+
+## Iniciar ChromeDriver
+
+```bash
+vendor\laravel\dusk\bin\chromedriver-win.exe --port=9515
+```
+
+---
+
+## Executar Browser Tests
+
+```bash
+php artisan dusk
+```
+
+---
+
 # 🔐 Recuperação de Senha
 
-O projeto utiliza **Mailtrap** para testes de envio de e-mails em ambiente de desenvolvimento 📧
+O projeto utiliza Mailtrap para testes de envio de e-mails em ambiente de desenvolvimento 📧
 
 ## Configuração SMTP
 
@@ -299,7 +378,7 @@ MAIL_ENCRYPTION=tls
 
 # 👥 Tipos de Usuário
 
-## 👤 Usuário comum
+## 👤 Usuário Comum
 
 Pode:
 
@@ -333,6 +412,7 @@ O sistema utiliza uma identidade visual moderna baseada em:
 * blur effects 🌌
 * gradientes 🎨
 * componentes modernos com Tailwind CSS
+* dashboard neon/glass UI 💜
 
 ---
 
@@ -362,7 +442,19 @@ O projeto possui:
 * proteção contra XSS;
 * validações backend;
 * proteção de rotas administrativas;
-* upload validado de imagens.
+* upload validado de imagens;
+* autenticação via Sanctum;
+* proteção de API REST.
+
+---
+
+# 📊 Resultados dos Testes
+
+O projeto atualmente possui:
+
+* ✅ 54 testes automatizados
+* ✅ 126 assertions
+* ✅ 100% dos testes aprovados
 
 ---
 
@@ -372,13 +464,14 @@ O projeto possui:
 * Estrutura preparada para futuras expansões 🚀
 * API pronta para integrações futuras 🔗
 * Sistema preparado para crescimento 📈
+* Projeto com cobertura de testes automatizados ⚡
 
 ---
 
 # 💜 Autor
 
-## Éverton Lima
+## Everton Lima
 
-Projeto acadêmico desenvolvido em ADS com Laravel 💻✨
+Projeto acadêmico desenvolvido em ADS utilizando Laravel 💻✨
 
 Feito com dedicação, café ☕ e muitas linhas de código 💜
